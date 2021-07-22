@@ -1,0 +1,41 @@
+{
+  "npmScope": "adroit",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    ".eslintrc.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "accessToken": "NjI0ZTQ0M2UtYjllZC00MzI3LThjZjItMDhlZjAzYTRhMGNkfHJlYWQtd3JpdGU=",
+        "canTrackAnalytics": false,
+        "showUsageWarnings": true
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "projects": {
+    "ng-util-demo": {
+      "tags": []
+    },
+    "ng-util-demo-e2e": {
+      "tags": [],
+      "implicitDependencies": ["ng-util-demo"]
+    }
+  }
+}
