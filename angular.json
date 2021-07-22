@@ -119,7 +119,8 @@
           }
         }
       }
-    }
+    },
+    "ng-utils": "libs\\ng-utils"
   },
   "cli": {
     "defaultCollection": "@nrwl/angular"
