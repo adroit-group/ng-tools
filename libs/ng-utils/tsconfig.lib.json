@@ -7,7 +7,19 @@
     "declarationMap": true,
     "inlineSources": true,
     "types": [],
-    "lib": ["dom", "es2018"]
+    "lib": ["dom", "es2018"],
+    "baseUrl": "./src/lib",
+    "paths": {
+      "~classes": ["./classes/index"],
+      "~decorators": ["./decorators/index"],
+      "~directives": ["./directives/index"],
+      "~enums": ["./enums/index"],
+      "~interfaces": ["./interfaces/index"],
+      "~mixins": ["./mixins/index"],
+      "~pipes": ["./pipes/index"],
+      "~tokens": ["./tokens/index"],
+      "~types": ["./types/index"]
+    }
   },
   "exclude": ["src/test-setup.ts", "**/*.spec.ts"],
   "include": ["**/*.ts"]

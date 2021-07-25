@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@adroit/ng-utils": ["libs/ng-utils/src/index.ts"]
+      "@adroit/ng-utils": ["libs/ng-utils/src/public-api.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
