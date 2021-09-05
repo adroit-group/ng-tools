@@ -1,10 +1,20 @@
 {
+  "ts-node": {
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "target": "ES2017",
+      "module": "CommonJS",
+      "types": ["node", "node_modules/gitlog"],
+      "typeRoots": ["node_modules/@types"]
+    }
+  },
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -15,7 +25,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@adroit/ng-utils": ["libs/ng-utils/src/public-api.ts"]
+      "~adroit/ng-utils": ["libs/ng-utils/src/public-api.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

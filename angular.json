@@ -21,11 +21,20 @@
               "apps/ng-util-demo/src/favicon.ico",
               "apps/ng-util-demo/src/assets"
             ],
-            "styles": ["apps/ng-util-demo/src/styles.scss"],
-            "scripts": []
+            "styles": ["apps/ng-util-demo/src/styles.scss"]
           },
           "configurations": {
             "production": {
+              "optimization": true,
+              "statsJson": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "commonChunk": true,
+              "deleteOutputPath": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -43,8 +52,7 @@
                   "replace": "apps/ng-util-demo/src/environments/environment.ts",
                   "with": "apps/ng-util-demo/src/environments/environment.prod.ts"
                 }
-              ],
-              "outputHashing": "all"
+              ]
             },
             "development": {
               "buildOptimizer": false,
@@ -123,6 +131,7 @@
     "ng-utils": "libs\\ng-utils"
   },
   "cli": {
+    "analytics": "2aa8a555-aba3-45c8-8b66-d5e926aec314",
     "defaultCollection": "@nrwl/angular"
   },
   "generators": {
