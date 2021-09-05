@@ -1,0 +1,28 @@
+import { MixinType, Constructor } from './mixin-type';
+
+/**
+ * @summary {$summary}
+ * @description {$description}
+ * @remarks {$remarks}
+ * @example
+ * ```ts
+ * class MyClass extends {$MixinName}Mixin() {
+ *      constructor(...args: any[]) {
+ *           super(...args);
+ *       }
+ *  }
+ * ```
+ */
+export function {$MixinName}Mixin<
+    T extends Constructor<any, any[]> = FunctionConstructor
+>(base?: T) {
+    return class {$MixinName} extends ((base ?? class {}) as T) {
+        constructor(
+            ...args: unknown[]
+        ) {
+            super(...args);
+        }
+
+        // Your code goes here...
+    };
+}
