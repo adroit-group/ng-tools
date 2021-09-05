@@ -1,4 +1,4 @@
-import { Constructor } from '~interfaces';
+import { Constructor } from 'interfaces';
 
 /**
  * @summary Given a Constructor type gets the instance type created by the constructor.

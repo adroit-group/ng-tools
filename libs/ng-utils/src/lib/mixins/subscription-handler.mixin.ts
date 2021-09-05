@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs';
-import { Constructor } from '~interfaces';
-import { MixinType } from '~types';
+import { Constructor } from '../interfaces';
+import { MixinType } from '../types';
+import { MediaObserverMixin } from './media-observer.mixin';
 
 /**
  * A SubscriptionHandlerMixin által szolgáltatott publikus osztyál elemeket leíró interface
@@ -37,7 +38,7 @@ export function SubscriptionHandlerMixin<
   const Base = (base ?? class {}) as Constructor<any, Array<any>>;
 
   return class SubscriptionHandler
-    extends Base
+    extends MediaObserverMixin(Base)
     implements ISubscriptionHandler
   {
     public readonly onDestroy$ = new Subject<void>();
@@ -51,4 +52,19 @@ export function SubscriptionHandlerMixin<
       this.onDestroy$.complete();
     }
   } as any;
+}
+
+class Handler {}
+
+class SubscriptionHandler extends Handler implements ISubscriptionHandler {
+  public readonly onDestroy$ = new Subject<void>();
+
+  /**
+   * a helyi onDestroy$ subjectet zárja le egy emit után.
+   * A komponens belső stream-jeit zárjuk le általában erre a subjectre figyelve, így a streamek lezáródnak, amikor a komponens életciklusa véget ér
+   */
+  public ngOnDestroy(): void {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
+  }
 }

@@ -1,29 +1,113 @@
+/* eslint-disable @angular-eslint/directive-selector */
+/* eslint-disable @angular-eslint/no-input-rename */
 /* eslint-disable max-classes-per-file */
 import {
   ChangeDetectorRef,
   Directive,
+  Inject,
   Input,
   OnDestroy,
   OnInit,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import {
+  AsyncSubject,
+  combineLatest,
+  forkJoin,
+  isObservable,
+  Observable,
+  ObservableInput as RxJsObservableInput,
+  Subscribable,
+  Subscription,
+  zip,
+} from 'rxjs';
+import { concatMapTo, map } from 'rxjs/operators';
+import { observify } from '../functions';
+import {
+  NgSubscribeBehavior,
+  NG_SUBSCRIBE_EXCEPTION_BEHAVIOR,
+  NG_SUBSCRIBE_MISSING_STREAM_BEHAVIOR,
+} from '../tokens';
+import { HashMap } from '../types';
 
 /**
  * Az NgSubscribe direktíva által használt kontextus objektum.
  * Ez az objektum tartja számon a definiált tempalte változó értékét és típusát.
  */
-export class NgSubscribeContext<T extends any> {
+export class NgSubscribeContext<V extends unknown | Array<unknown>> {
   /**
    * A tempalte kontextus 'implicit' értéke.
    */
-  public $implicit: T = null;
+  public $implicit?: V;
+
   /**
    * A tempalte kontextus nevesített értéke.
    */
-  public ngSubscribe: T = null;
+  public ngSubscribe?: V;
+
+  /**
+   * A stream-ből érkező hiba
+   */
+  public error?: Error | string;
+
+  /**
+   * Befejeződött-e a stream flag
+   */
+  public completed = false;
 }
+
+/**
+ * Az NgSubscribe direktíva által használt error template kontextus objektuma.
+ * Ez az objektum tartja számon a a direktíva inputjában történt hibát
+ */
+export class NgSubscribeErrorContext {
+  /**
+   * A direktíva inputjában történt hiba
+   */
+  public $implicit?: Error;
+}
+
+/**
+ * A direktíva által használható stream kombináló függvények típusai
+ */
+type CombineWith = 'combineLatest' | 'forkJoin' | 'zip';
+
+/**
+ * Egy függvény típusa, mely több Observable stream-et tud összekombinálni egyé
+ */
+type StreamCombinerFn = <T>(
+  input: Array<RxJsObservableInput<T>>
+) => Observable<T>;
+
+/**
+ * A direktíva számára rendelkezésre álló alapértelmezett stream kombináló függvényeket tartalmazó objektum
+ */
+const combinerMap: HashMap<
+  CombineWith,
+  <T>(input: Array<AsyncInput<T>>) => Observable<T>
+> = {
+  combineLatest,
+  forkJoin,
+  zip,
+};
+
+/**
+ * A direktíva által kezelt aszinkron értéke lehetséges típusa
+ */
+export type AsyncInput<T> = PromiseLike<T> | Subscribable<T>;
+
+/**
+ * Egy aszinkron értékeket tartalmazó objektum alakját leíró típus
+ */
+export type AsyncValuesMap<T> = {
+  [K in keyof T]: AsyncInput<T[K]>;
+};
+
+/**
+ * A direktíva által kezelt értékek típusai
+ */
+type NgSubscribeAsyncInput<T> = AsyncInput<T> | AsyncValuesMap<T>;
 
 /**
  * Struktúrális direktíva, ami lehővé teszi a async értékek 'kicsomagolását' az angular-os tempalte-kben az 'as' kulcsóval.
@@ -43,45 +127,157 @@ export class NgSubscribeContext<T extends any> {
   selector: '[ngSubscribe]',
 })
 export class NgSubscribeDirective<T> implements OnInit, OnDestroy {
+  public static ngTemplateGuard_ngSubscribe: 'binding';
+
   /**
-   * Az inputként kapott observable.
+   * A tempalte frissítési stratégia, melyet az input stream új emissziójakor alkalmaz a direktíva
    */
-  private observable: Observable<any>;
+  @Input('ngSubscribeWithStrategy')
+  public strategy: 'markForCheck' | 'detectChanges' = 'markForCheck';
+
   /**
-   * A kontextus egy példánya.
+   * A több aszinkron értéket tartalmazó input értékén használandó stream kombináló függvény típusa
+   * vagy maga a stream kombináló függvény referenciája, amennyiben egyedi függvényt kell használni
    */
-  private context = new NgSubscribeContext<T>();
-  /**
-   * A direktíva input observable-jét kezelő susbscription.
-   */
-  private subscription: Subscription;
+  @Input('ngSubscribeCombineWith')
+  public combineWith: CombineWith | StreamCombinerFn = 'combineLatest';
 
   /**
    * Az érték, mely a direktíva által definiálva lesz tempalte változóban.
    */
   @Input()
-  public set ngSubscribe(inputObservable: Observable<T>) {
-    if (this.observable !== inputObservable) {
-      this.observable = inputObservable;
-      this.subscription && this.subscription.unsubscribe();
-      this.subscription = this.observable.subscribe((value) => {
-        this.context.ngSubscribe = value;
-        this.cdr.markForCheck();
-      });
+  public set ngSubscribe(input: NgSubscribeAsyncInput<T>) {
+    if (this._observable === input) {
+      return;
     }
+
+    if (!input) {
+      this._observable = this.getMissingStreamBehavior as Observable<T>;
+    }
+
+    this.showBefore();
+
+    const source$ =
+      Array.isArray(input) || this.isObservableMap(input)
+        ? this.handleStreamMerge(input)
+        : observify(input);
+    this._observable = this._init.pipe(concatMapTo(source$));
+    this._subscription && this._subscription.unsubscribe();
+    this._subscription = this.subscribeToObservable(this._observable);
   }
+
+  /**
+   * Az input stream hiba emissziójakor megjelenítendő template refernciája
+   */
+  @Input('ngSubscribeError')
+  public set errorTpl(ref: TemplateRef<NgSubscribeErrorContext>) {
+    this._errorRef = ref;
+  }
+
+  /**
+   * Az input stream első emissziója elött megjelenítendő template referenciája
+   */
+  @Input('ngSubscribeBefore')
+  public set beforeTpl(ref: TemplateRef<null>) {
+    this._beforeRef = ref;
+  }
+
+  /**
+   * Az input stream utolsó emissziója után megjelenítendő template referenciája
+   */
+  @Input('ngSubscribeAfter')
+  public set afterTpl(ref: TemplateRef<null>) {
+    this._afterRef = ref;
+  }
+
+  @Input('ngSubscribeExceptionBehavior')
+  public set customExceptionBehavior(behavior: NgSubscribeBehavior) {
+    this._customExceptionBehavior = behavior;
+  }
+
+  @Input('ngSubscribeMissingStreamBehavior')
+  public set customMissingStreamBehavior(behavior: NgSubscribeBehavior) {
+    this._customMissingStreamBehavior =
+      typeof behavior === 'function' ? behavior() : behavior;
+  }
+
+  /**
+   * Az inputként kapott observable.
+   */
+  private _observable!: Observable<T>;
+
+  /**
+   * A kontextus egy példánya.
+   */
+  private _context = new NgSubscribeContext<T>();
+
+  /**
+   * A hiba kontextus példánya
+   */
+  private _errorContext = new NgSubscribeErrorContext();
+
+  /**
+   * A direktíva input observable-jét kezelő susbscription.
+   */
+  private _subscription!: Subscription;
+
+  /**
+   * A hiba termplate példánya
+   */
+  private _errorRef!: TemplateRef<NgSubscribeErrorContext>;
+
+  /**
+   * Egyedi hiba viselkedés
+   */
+  private _customExceptionBehavior!: NgSubscribeBehavior;
+
+  /**
+   * Egyedi hiányzó stream viselkedés
+   */
+  private _customMissingStreamBehavior!: Observable<unknown>;
+
+  /**
+   * A stream betöltés elötti template példáyna
+   */
+  private _beforeRef!: TemplateRef<unknown>;
+
+  /**
+   * A stream befejezés utáni template péáldnya
+   */
+  private _afterRef!: TemplateRef<unknown>;
+
+  /**
+   * Egyedi hiányzó stream viselkedés kiszámolása a konfigurált és inoutként kapott lehetőségekből
+   */
+  private get getMissingStreamBehavior(): Observable<unknown> {
+    return (
+      this._customMissingStreamBehavior ??
+      (typeof this.missingStreamBehavior === 'function'
+        ? this.missingStreamBehavior()
+        : this.missingStreamBehavior)
+    );
+  }
+
+  /**
+   * A stream betöltést elött megjelenítendő tempalte jelző subject-je
+   */
+  private readonly _init = new AsyncSubject<void>();
 
   /**
    * Konstruktor
    *
    * @param vcr A direktíva host elementjéhez tartozó view referenciája
    * @param cdr Az Angular változás kezelő service.
-   * @param templateRef A direktíva template-jének refereniája.
+   * @param tpl A direktíva template-jének refereniája.
    */
   constructor(
     private readonly vcr: ViewContainerRef,
     private readonly cdr: ChangeDetectorRef,
-    private readonly templateRef: TemplateRef<NgSubscribeContext<T>>
+    private readonly tpl: TemplateRef<NgSubscribeContext<T>>,
+    @Inject(NG_SUBSCRIBE_MISSING_STREAM_BEHAVIOR)
+    private readonly missingStreamBehavior: NgSubscribeBehavior,
+    @Inject(NG_SUBSCRIBE_EXCEPTION_BEHAVIOR)
+    private readonly exceptionBehavior: NgSubscribeBehavior
   ) {}
 
   /**
@@ -101,13 +297,182 @@ export class NgSubscribeDirective<T> implements OnInit, OnDestroy {
    * A direktíva és a tempalte inicializálása.
    */
   public ngOnInit(): void {
-    this.vcr.createEmbeddedView(this.templateRef, this.context);
+    this.showBefore();
+    this._init.next();
+    this._init.complete();
+    this.vcr.createEmbeddedView(this.tpl, this._context);
   }
 
   /**
    * A direktíva destruktor logikája
    */
   public ngOnDestroy(): void {
-    this.subscription && this.subscription.unsubscribe();
+    this._subscription && this._subscription.unsubscribe();
+  }
+
+  /**
+   * Több aszinkron érték összefüzésének kezelése
+   *
+   * @param input Az aszinkron értékeket tartalamzó input (tömb vagy objektum)
+   */
+  private handleStreamMerge(
+    input: AsyncValuesMap<T> | Array<PromiseLike<T>> | Array<Subscribable<T>>
+  ): Observable<T> {
+    const mergedObservables = this.mergeObservables(input);
+
+    const combiner =
+      typeof this.combineWith === 'function'
+        ? this.combineWith
+        : combinerMap[this.combineWith];
+
+    let combinedStreams: Observable<T>;
+    try {
+      combinedStreams = combiner(Object.values(mergedObservables));
+    } catch (error) {
+      const exceptionBehavior =
+        this._customExceptionBehavior ?? this.exceptionBehavior;
+      const replacementStream = (
+        typeof exceptionBehavior === 'function'
+          ? exceptionBehavior(error)
+          : exceptionBehavior
+      ) as Observable<T>;
+
+      return (
+        isObservable(replacementStream)
+          ? replacementStream
+          : this.getMissingStreamBehavior
+      ) as Observable<T>;
+    }
+
+    return combinedStreams.pipe(
+      map((merged) => {
+        if (Array.isArray(input)) {
+          return merged;
+        } else {
+          const observableMapKeys = Object.keys(input);
+
+          return Object.values(merged).reduce(
+            (acc, curr, index) => ({
+              ...acc,
+              [observableMapKeys[index]]: curr,
+            }),
+            {}
+          );
+        }
+      })
+    );
+  }
+
+  /**
+   * Feliratkozás az inputként kapott vagy inputból kombinált observable-re
+   *
+   * @param input Az observable stream amire fel kell iratkozni
+   */
+  private subscribeToObservable(input: Observable<T>): Subscription {
+    return input.subscribe({
+      next: (value) => {
+        this._context.$implicit = value;
+        this._context.ngSubscribe = value;
+        this.cdr[this.strategy]();
+      },
+      error: (err: Error) => {
+        if (this._errorRef instanceof TemplateRef) {
+          this._errorContext.$implicit = err;
+          this.vcr.clear();
+          this.vcr.createEmbeddedView(this._errorRef, this._errorContext);
+        } else {
+          this._context.error = err;
+        }
+
+        this.cdr[this.strategy]();
+      },
+      complete: () => {
+        this._context.completed = true;
+        if (this._afterRef instanceof TemplateRef) {
+          this.vcr.clear();
+          this.vcr.createEmbeddedView(this._afterRef, this._context);
+        }
+        this.cdr[this.strategy]();
+      },
+    });
+  }
+
+  /**
+   * Aszinkron értékek kombinálása
+   *
+   * @param input Az aszinkron értékeket tartalamzó input (tömb vagy objektum)
+   */
+  private mergeObservables(
+    input: AsyncValuesMap<T> | Array<AsyncInput<T>>
+  ): AsyncValuesMap<T> {
+    return Array.isArray(input)
+      ? input.reduce(
+          (acc, curr, index) => ({ ...acc, [index]: curr }),
+          {} as AsyncValuesMap<T>
+        )
+      : input;
+  }
+
+  /**
+   * Eldönti egy értékről hogy observable-e
+   *
+   * @param input Az érték
+   */
+  private isObservableMap(
+    input: NgSubscribeAsyncInput<T>
+  ): input is AsyncValuesMap<T> {
+    return Object.values(input).every((val) => isObservable(val));
+  }
+
+  /**
+   * A stream betöltés elötti tempalte megjelenítése
+   */
+  private showBefore(): void {
+    if (this._beforeRef instanceof TemplateRef) {
+      this.vcr.clear();
+      this.vcr.createEmbeddedView(this._beforeRef);
+    }
   }
 }
+
+// function isNgSubscribeContextGuard(value: unknown): value is NgSubscribeContext<any> {
+//     return typeof value === 'object' && 'ngSubscribe' in value && '$implicit' in value;
+// }
+
+// export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+//     k: infer I
+// ) => void
+//     ? I
+//     : never;
+
+// type LastOf<T> = UnionToIntersection<T extends any ? () => T : never> extends () => infer R
+//     ? R
+//     : never;
+
+// TS4.0+
+// export type Push<T extends Array<any>, V> = [...T, V];
+
+// TS4.1+
+// type TuplifyUnion<T, L = LastOf<T>, N = [T] extends [never] ? true : false> = true extends N
+//     ? []
+//     : Push<TuplifyUnion<Exclude<T, L>>, L>;
+
+// type UnBoxObservableInput<T> = T extends ObservableInput<infer Unboxed>
+//     ? UnBoxObservableInput<Unboxed>
+//     : T;
+
+// export type UnBoxNgSubscribeObservableInput<T> = T extends ObservableInput<infer Simple>
+//     ? Simple
+//     : T extends Array<infer Arr>
+//     ? Arr
+//     : T extends ObservableMap<infer Map>
+//     ? Map
+//     : never;
+
+// type testInputSimple = UnBoxNgSubscribeObservableInput<Observable<string>>;
+// type testInputSimplePro = UnBoxNgSubscribeObservableInput<Promise<string>>;
+// type testInputArr = UnBoxNgSubscribeObservableInput<[Observable<string>, Promise<number>]>;
+// type testInputMap = UnBoxNgSubscribeObservableInput<{
+//     asd: Observable<string>;
+//     dsa: Promise<number>;
+// }>;

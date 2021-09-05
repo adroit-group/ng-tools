@@ -1,6 +1,6 @@
 import { Inject, Optional, Pipe, PipeTransform } from '@angular/core';
-import { METHOD_INVOKER_PIPE_HOST } from '~tokens';
-import { InvokableMethod } from '~types';
+import { METHOD_INVOKER_PIPE_HOST } from '../tokens';
+import { InvokableMethod } from '../types';
 
 /**
  * Egy meta pipe, mely más pipe-ok helyettesítésére szolgál.

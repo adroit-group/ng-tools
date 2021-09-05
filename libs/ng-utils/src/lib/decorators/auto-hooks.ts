@@ -1,7 +1,7 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable @typescript-eslint/ban-types */
-import { ELifeCycleHook } from '~enums';
+import { ELifeCycleHook } from '../enums';
 
 /**
  * Egy speciális érték, melyet a dekorátor használ az automatikus bindolás megfelelő működéséhez.
@@ -58,7 +58,11 @@ function gatherHookRecursively(
       break;
     }
 
-    if (parentProto.constructor[Symbol.for(AUTO_HOOKS_MARK)]) {
+    if (
+      (parentProto.constructor as Record<PropertyKey, any>)[
+        Symbol.for(AUTO_HOOKS_MARK) as any
+      ]
+    ) {
       throw new Error(`
         Invalid usage of @AutoHooks decorator encountered!
         Only one class per prototype chain can be decorated by the @AutoHooks decorator.
@@ -67,7 +71,9 @@ function gatherHookRecursively(
       `);
     }
 
-    const parentHookFn = parentProto[hookName];
+    const parentHookFn = (parentProto as Record<PropertyKey, any>)[
+      hookName
+    ] as () => any;
     if (typeof parentHookFn === 'function') {
       hookFns.push({
         hook: parentHookFn,
@@ -93,7 +99,7 @@ function shouldAugmentPreV10Hooks(
   const isLifecycleHookMethod =
     recognizedLifeCycleHookMethods.includes(hookName);
 
-  return isLifecycleHookMethod && target['ɵcmp'];
+  return isLifecycleHookMethod && (target as Record<PropertyKey, any>)['ɵcmp'];
 }
 
 function augmentPreV10Hooks(
@@ -107,16 +113,18 @@ function augmentPreV10Hooks(
     .map((char, i) => (i === 0 ? char.toLowerCase() : char))
     .join('');
 
-  target['ɵcmp'][compFeatureName] = function (...args: Array<any>) {
+  (target as Record<PropertyKey, any>)['ɵcmp'][compFeatureName] = function (
+    ...args: Array<any>
+  ) {
     callableHooksWithOwningPrototypes.forEach((hookWithOwningPrototype) => {
       const protoCtrIsMarkedAsFirst =
         hookWithOwningPrototype.proto.constructor.hasOwnProperty(
           Symbol.for('firstInProtoChain')
         );
 
-      return hookWithOwningPrototype.hook.call(
+      return hookWithOwningPrototype.hook.apply<any, any[], any>(
         protoCtrIsMarkedAsFirst ? this : hookWithOwningPrototype.proto,
-        ...args
+        args
       );
     });
   };
@@ -127,9 +135,11 @@ function augmentV10Hooks(
   target: Function,
   callableHooksWithOwningPrototypes: Array<TProtoHook>
 ) {
-  target[hookName] = function (...args: Array<any>) {
+  (target as Record<PropertyKey, any>)[hookName] = function (
+    ...args: Array<any>
+  ) {
     callableHooksWithOwningPrototypes.forEach((hookWithOwningPrototype) =>
-      hookWithOwningPrototype.hook.call(this, ...args)
+      hookWithOwningPrototype.hook.apply<any, any[], any>(this, args)
     );
   };
 }

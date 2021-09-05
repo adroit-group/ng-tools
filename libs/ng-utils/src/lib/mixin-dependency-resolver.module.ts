@@ -1,5 +1,5 @@
 import { Injector, NgModule, Optional, SkipSelf } from '@angular/core';
-import { ASingletonModule } from '~classes';
+import { ASingletonModule } from './classes';
 
 const injectorSym = Symbol('__MixinDependencyResolverModule:InjectorSym__');
 

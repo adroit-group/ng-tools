@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/directive-selector */
 /* eslint-disable max-classes-per-file */
 import {
   ChangeDetectorRef,
@@ -16,11 +17,11 @@ export class NgLetContext<T> {
   /**
    * A tempalte kontextus 'implicit' értéke.
    */
-  public $implicit: T = null;
+  public $implicit?: T;
   /**
    * A tempalte kontextus nevesített értéke.
    */
-  public ngLet: T = null;
+  public ngLet?: T;
 }
 
 /**

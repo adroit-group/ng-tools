@@ -1,9 +1,9 @@
 import { MediaObserver as FlexMediaObserver } from '@angular/flex-layout';
-import { MixinDependencyResolverModule } from 'mixin-dependency-resolver.module';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { Constructor } from '~interfaces';
-import { MixinType } from '~types';
+import { Constructor } from '../interfaces';
+import { MixinDependencyResolverModule } from '../mixin-dependency-resolver.module';
+import { MixinType } from '../types';
 
 /**
  * A MediaObserverMixin által szolgáltatott publikus osztyál elemeket leíró interface
