@@ -493,7 +493,7 @@ export class ClassToMixinVisitor extends ASourceFileVisitor {
     const publicMembers = members.filter(
       (classMember) =>
         !classMember.modifiers?.length ||
-        asNodeArray(classMember.modifiers).some(
+        asNodeArray(classMember.modifiers).every(
           (modifier) =>
             modifier.kind === ts.SyntaxKind.PublicKeyword ||
             (modifier.kind !== ts.SyntaxKind.PrivateKeyword &&

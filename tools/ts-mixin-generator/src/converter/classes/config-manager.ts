@@ -17,7 +17,7 @@ export class ConfigurationManager {
     inferMissingTypes: true,
     addMissingAccessModifiers: true,
     copyDocumentation: true,
-    verbose: true,
+    verbose: false,
   };
 
   public get config(): ITsMixinGeneratorConfig {

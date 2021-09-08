@@ -54,17 +54,17 @@ export function SubscriptionHandlerMixin<
   } as any;
 }
 
-class Handler {}
+// class Handler {}
 
-class SubscriptionHandler extends Handler implements ISubscriptionHandler {
-  public readonly onDestroy$ = new Subject<void>();
+// class SubscriptionHandler extends Handler implements ISubscriptionHandler {
+//   public readonly onDestroy$ = new Subject<void>();
 
-  /**
-   * a helyi onDestroy$ subjectet zárja le egy emit után.
-   * A komponens belső stream-jeit zárjuk le általában erre a subjectre figyelve, így a streamek lezáródnak, amikor a komponens életciklusa véget ér
-   */
-  public ngOnDestroy(): void {
-    this.onDestroy$.next();
-    this.onDestroy$.complete();
-  }
-}
+//   /**
+//    * a helyi onDestroy$ subjectet zárja le egy emit után.
+//    * A komponens belső stream-jeit zárjuk le általában erre a subjectre figyelve, így a streamek lezáródnak, amikor a komponens életciklusa véget ér
+//    */
+//   public ngOnDestroy(): void {
+//     this.onDestroy$.next();
+//     this.onDestroy$.complete();
+//   }
+// }

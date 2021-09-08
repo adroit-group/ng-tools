@@ -25,6 +25,14 @@ export class AppComponent extends A {
     return true;
   }
 
+  private readonly privatePropertyOfComp = true;
+
+  protected protectedPropertyOfComp = 0;
+
+  protected get protectedGetterOfComp() {
+    return '';
+  }
+
   /**
    * @summary Test docs
    */
@@ -33,4 +41,6 @@ export class AppComponent extends A {
   }
 
   private privateMethodOfComp(): void {}
+
+  protected protectedMethodOfCom(): void {}
 }
