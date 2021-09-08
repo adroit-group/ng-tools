@@ -107,66 +107,62 @@ export abstract class ASTUtils {
   }
 
   public static doesHaveExtendsClause(
-    classDeclaration: ts.ClassDeclaration
+    classDeclaration: ts.ClassDeclaration | ts.ClassExpression
   ): boolean {
     return !!ASTUtils.getExtendsClause(classDeclaration)?.types?.length;
   }
 
   public static doesHaveImplementsClause(
-    classDeclaration: ts.ClassDeclaration
+    classDeclaration: ts.ClassDeclaration | ts.ClassExpression
   ): boolean {
     return !!ASTUtils.getImplementsClause(classDeclaration)?.types?.length;
   }
 
-  public static isComponentOrDirectiveDeclaration(
-    node: ts.Node
-  ): node is ts.ClassDeclaration {
-    if (!ts.isClassDeclaration(node)) {
-      return false;
+  public static removeDuplicateImports(
+    sourceFile: ts.SourceFile
+  ): ts.SourceFile {
+    if (!ts.isSourceFile(sourceFile)) {
+      return sourceFile;
     }
 
-    const decorators =
-      node.decorators ??
-      ((node?.['original']?.['decorators'] ??
-        []) as ts.NodeArray<ts.Decorator>);
+    const importStatements = asNodeArray(sourceFile.statements).filter(
+      ts.isImportDeclaration
+    );
 
-    return !!asNodeArray(decorators).find((decorator) => {
-      if (!ts.isCallExpression(decorator.expression)) {
-        return false;
+    const uniqueImports = importStatements.reduce((acc, curr) => {
+      const { moduleSpecifier, importClause } = curr;
+      const moduleName = moduleSpecifier.getText(sourceFile);
+      const importedSymbols = asNodeArray(
+        (importClause.namedBindings as ts.NamedImports).elements
+      ).map((importSpecifier) => importSpecifier.name.getText(sourceFile));
+
+      const importFromSameModule = acc.find(
+        (importDcl) =>
+          importDcl.moduleSpecifier.getText(sourceFile) === moduleName
+      );
+
+      const hasImportsFromSameModule = !!importFromSameModule;
+      if (!hasImportsFromSameModule) {
+        return [...acc, curr];
       }
 
-      const isComponent = (
-        decorator?.expression?.expression?.getText() ?? ''
-      ).includes('Component');
+      return acc;
+    }, [] as ts.ImportDeclaration[]);
 
-      const isDirective = (
-        decorator?.expression?.expression?.getText() ?? ''
-      ).includes('Directive');
-
-      if (!isComponent && !isDirective) {
-        return false;
-      }
-
-      const componentDecoratorPropNames = [
-        'selector',
-        'templateUrl',
-        'template',
-        'styles',
-        'styleUrls',
-        'changeDetection',
-        'providers',
-      ];
-
-      return !!asNodeArray(decorator.expression.arguments).find((arg) => {
-        if (!ts.isObjectLiteralExpression(arg)) {
-          return false;
-        }
-
-        return !!asNodeArray(arg.properties).find((prop) =>
-          componentDecoratorPropNames.includes(prop.name.getText())
-        );
-      });
-    });
+    return ts.factory.updateSourceFile(
+      sourceFile,
+      [
+        ...uniqueImports,
+        ...asNodeArray(sourceFile.statements).filter(
+          (st) => !ts.isImportDeclaration(st)
+        ),
+      ],
+      sourceFile.isDeclarationFile,
+      sourceFile.referencedFiles,
+      sourceFile.typeReferenceDirectives,
+      sourceFile.hasNoDefaultLib,
+      sourceFile.libReferenceDirectives
+    );
   }
 
   public static hasImportsFromModule(
@@ -202,91 +198,5 @@ export abstract class ASTUtils {
               importSpecifier?.name?.escapedText?.toString() === importName
           );
       });
-  }
-
-  public static updateSourceFileWithClass(
-    sourceFile: ts.SourceFile,
-    classDcl: ts.ClassDeclaration
-  ): ts.SourceFile {
-    if (!ts.isSourceFile(sourceFile) || !ts.isClassDeclaration(classDcl)) {
-      return sourceFile;
-    }
-
-    const isClassDefinedInFile = asNodeArray(sourceFile.statements).some(
-      (stmt) =>
-        ts.isClassDeclaration(stmt) &&
-        stmt.name.escapedText.toString() ===
-          classDcl.name.escapedText.toString()
-    );
-    if (!isClassDefinedInFile) {
-      return sourceFile;
-    }
-
-    return ts.updateSourceFileNode(
-      sourceFile,
-      ts.createNodeArray([
-        ...asNodeArray(sourceFile.statements).map((statement) => {
-          if (
-            !ts.isClassDeclaration(statement) ||
-            statement.name.escapedText.toString() !==
-              classDcl.name.escapedText.toString()
-          ) {
-            return statement;
-          }
-
-          return classDcl;
-        }),
-      ])
-    );
-  }
-
-  public static updateCtorDeclarationOfClass(
-    classDcl: ts.ClassDeclaration,
-    ctorDcl: ts.ConstructorDeclaration
-  ): ts.ClassDeclaration {
-    if (
-      !ts.isClassDeclaration(classDcl) ||
-      !ts.isConstructorDeclaration(ctorDcl)
-    ) {
-      return classDcl;
-    }
-
-    return ts.updateClassDeclaration(
-      classDcl,
-      classDcl.decorators,
-      classDcl.modifiers,
-      classDcl.name,
-      classDcl.typeParameters,
-      classDcl.heritageClauses,
-      [
-        ...asNodeArray(classDcl.members).map((member) => {
-          return !ts.isConstructorDeclaration(member) ? member : ctorDcl;
-        }),
-      ]
-    );
-  }
-
-  public static updateConstructorWithAugmentedParam(
-    ctorDcl: ts.ConstructorDeclaration,
-    paramDcl: ts.ParameterDeclaration
-  ): ts.ConstructorDeclaration {
-    if (!ts.isConstructorDeclaration(ctorDcl) || !ts.isParameter(paramDcl)) {
-      return ctorDcl;
-    }
-
-    return ts.updateConstructor(
-      ctorDcl,
-      ctorDcl.decorators,
-      ctorDcl.modifiers,
-      [
-        ...asNodeArray(ctorDcl.parameters).map((ctorParam) =>
-          (ctorParam.name as ts.Identifier).escapedText.toString() !==
-          (paramDcl.name as ts.Identifier).escapedText.toString()
-            ? ctorParam
-            : paramDcl
-        ),
-      ],
-      ctorDcl.body
-    );
   }
 }

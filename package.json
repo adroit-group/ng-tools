@@ -40,7 +40,8 @@
     "build:ts-mixin:d": "npx nodemon --watch ./tools/ts-mixin-generator/src/ ./dist/ts-mixin-generator/cli.js",
     "start:ts-mixin": "node ./dist/ts-mixin-generator/cli.js -n test -m post-ts-4 -p mixins",
     "test-cli:ts-mixin": "node ./dist/ts-mixin-generator/cli.js --help",
-    "webpack:ts-mixin": "webpack --config tools/ts-mixin-generator/webpack.config.js"
+    "webpack:ts-mixin": "webpack --config tools/ts-mixin-generator/webpack.config.js",
+    "test:ts-mixin:dev": "ng test ts-mixin-generator --watch"
   },
   "dependencies": {
     "@adroit/ng-utils": "file:dist/libs/ng-utils",

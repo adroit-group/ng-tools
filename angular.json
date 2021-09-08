@@ -128,7 +128,8 @@
         }
       }
     },
-    "ng-utils": "libs\\ng-utils"
+    "ng-utils": "libs\\ng-utils",
+    "ts-mixin-generator": "tools\\ts-mixin-generator"
   },
   "cli": {
     "analytics": "2aa8a555-aba3-45c8-8b66-d5e926aec314",

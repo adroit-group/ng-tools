@@ -10,7 +10,8 @@ export default class ClassToMixinTransformerFactory extends TsTransformerFactory
     }
 
     let sourceFile = node as ts.SourceFile;
-    console.warn('Transforming file: ' + sourceFile.fileName);
+
+    console.log(colors.cyan('Transforming file: ' + sourceFile.fileName));
 
     const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
 
@@ -32,7 +33,7 @@ export default class ClassToMixinTransformerFactory extends TsTransformerFactory
       this.context
     );
 
-    if (transformed) {
+    if (transformed && this.config.verbose) {
       console.log(
         colors.green(`
         Transformed ${s.fileName}: \n

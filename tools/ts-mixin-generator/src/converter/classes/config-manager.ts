@@ -17,6 +17,7 @@ export class ConfigurationManager {
     inferMissingTypes: true,
     addMissingAccessModifiers: true,
     copyDocumentation: true,
+    verbose: true,
   };
 
   public get config(): ITsMixinGeneratorConfig {
@@ -40,7 +41,7 @@ export class ConfigurationManager {
     EConfigTarget.PackageJSON,
   ];
 
-  constructor(private readonly CliConfigParams: Record<string, any>) {}
+  constructor(private readonly CliConfigParams: ITsMixinGeneratorConfig = {}) {}
 
   private resolveConfig(): ITsMixinGeneratorConfig {
     for (let i = 0; i < this.configTargetPrecedence.length; i++) {
@@ -61,7 +62,7 @@ export class ConfigurationManager {
       }
     }
 
-    console.warn(
+    console.log(
       colors.yellow(
         'TS Mixin Generator could not find any configuration. falling back to defaults.'
       )

@@ -1,5 +1,4 @@
 import { Constructor } from '@adroit/ng-utils';
-import colors from 'colors';
 import { Program as TsMorphProgram } from 'ts-morph';
 import ts from 'typescript';
 import { ITsMixinGeneratorConfig } from '../interfaces';
@@ -92,8 +91,8 @@ export abstract class TsTransformerFactoryBase<
     return (context: ts.TransformationContext) => {
       this.context = context;
 
-      const transformerName = this['constructor']['name'];
-      console.log(colors.yellow(`${transformerName} TRANSFORMER...`));
+      // const transformerName = this['constructor']['name'];
+      // console.log(colors.yellow(`${transformerName} TRANSFORMER...`));
 
       return (rootNode: ts.SourceFile) => {
         return ts.visitNode(rootNode, this.visit.bind(this));

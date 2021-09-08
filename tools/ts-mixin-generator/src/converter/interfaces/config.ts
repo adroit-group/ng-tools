@@ -13,4 +13,5 @@ export interface ITsMixinGeneratorConfig {
   inferMissingTypes?: boolean;
   addMissingAccessModifiers?: boolean;
   copyDocumentation?: boolean;
+  verbose?: boolean;
 }

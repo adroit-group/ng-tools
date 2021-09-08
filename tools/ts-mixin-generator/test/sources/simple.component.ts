@@ -1,19 +1,11 @@
 import { Component } from '@angular/core';
 
-class A {
-  public static staticAProp: string;
-
-  public instancePropOfA = 10;
-
-  public methodOfA(): void {}
-}
-
 @Component({
   selector: 'adroit-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent extends A {
+export class AppComponent {
   title = 'ng-util-demo';
 
   /**
