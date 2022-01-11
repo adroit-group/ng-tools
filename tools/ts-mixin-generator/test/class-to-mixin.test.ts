@@ -1,10 +1,10 @@
-import { getTestSetup } from './helpers/test-setup';
+import { TsMixinConverter } from '../src/converter/converter';
 
 describe('Transform class to mixin', () => {
   let transformedFile: string;
 
   beforeEach(() => {
-    const { transformFile } = getTestSetup();
+    const { transformFile } = new TsMixinConverter();
     transformedFile = transformFile('test-source.ts');
   });
 
@@ -28,7 +28,7 @@ describe('Transform class to mixin', () => {
         'publicGetterOfClass: '
       );
       const mixinInterfaceHasPublicMethodOfComp = transformedFile.includes(
-        'publicMethodOfComp: '
+        'publicMethodOfComp('
       );
 
       expect(mixinInterfaceHasTitleProp).toBeTruthy();
@@ -84,7 +84,7 @@ describe('Transform class to mixin', () => {
 
     it('Should have an assignment for base mixin class', () => {
       const hasMixinBaseClassAssignment = transformedFile.includes(
-        `const Base = (base ?? class {})`
+        `const Base = (base ?? class`
       );
       expect(hasMixinBaseClassAssignment).toBeTruthy();
     });

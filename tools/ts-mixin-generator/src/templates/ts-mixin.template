@@ -1,4 +1,4 @@
-import { MixinType, Constructor } from './mixin-type';
+import { Constructor, BaseOrCtor } from './mixin-type';
 
 /**
  * @summary {$summary}
@@ -14,9 +14,9 @@ import { MixinType, Constructor } from './mixin-type';
  * ```
  */
 export function {$MixinName}Mixin<
-    T extends Constructor<any, any[]> = FunctionConstructor
+    T extends Constructor<any, Array<any>> = undefined
 >(base?: T) {
-    return class {$MixinName} extends ((base ?? class {}) as T) {
+    const {$MixinName|camelCase} = class {$MixinName} extends ((base ?? class {}) as BaseOrCtor<T>) {
         constructor(
             ...args: unknown[]
         ) {
@@ -25,4 +25,6 @@ export function {$MixinName}Mixin<
 
         // Your code goes here...
     };
+
+    return {$MixinName|camelCase} as typeof {$MixinName|camelCase} & BaseOrCtor<T>
 }
