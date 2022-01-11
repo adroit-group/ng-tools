@@ -10,25 +10,31 @@ import {
 } from '@angular/core';
 
 /**
- * Az NgLet direktíva által használt kontextus objektum.
- * Ez az objektum tartja számon a definiált tempalte változó értékét és típusát.
+ * The object available in the the *ngLet directive's template.
  */
 export class NgLetContext<T> {
-  /**
-   * A tempalte kontextus 'implicit' értéke.
-   */
   public $implicit?: T;
-  /**
-   * A tempalte kontextus nevesített értéke.
-   */
   public ngLet?: T;
 }
 
 /**
- * Struktúrális direktíva, mely a tempalte változók definiálását könnyíti meg.
+ * A structural directive that allows the definition of template variables with ease.
  *
  * @example ```html
- *  <div *ngLet="item.route && item.returnRoute as realRoundtrip"> ... </div>
+ * <!-- Simple case -->
+ *  <div *ngLet="user.profileInfo.subscriptionInfo as userSubInfo"> ... </div>
+ * <!-- With pipes -->
+ *  <div *ngLet="userData$ | async as userData"> ... </div>
+ * <!-- Object notation syntax -->
+ * <div *ngLet="{ userData: userData$ | async, cartPrice: cartData.totalPrice} as userAndCartData">
+ *    <p> {{ userAndCartData.userData.name }} </p>
+ *    <p> {{ userAndCartData.cartPrice | currency }} </p>
+ * </div>
+ * <!-- Array notation syntax -->
+ * <div *ngLet="[userData$ | async, cartData.totalPrice] as userAndCartData">
+ *    <p> {{ userAndCartData[0].name }} </p>
+ *    <p> {{ userAndCartData[1] | currency }} </p>
+ * </div>
  * ```
  */
 @Directive({
@@ -36,17 +42,14 @@ export class NgLetContext<T> {
 })
 export class NgLetDirective<T> implements OnInit {
   /**
-   * Az előző input cache-t értéke.
+   * @internal
    */
   #memoizedValue: unknown;
 
-  /**
-   * A kontextus egy példánya.
-   */
   private context = new NgLetContext<T>();
 
   /**
-   * Az érték, mely a direktíva által definiálva lesz tempalte változóban.
+   * The value(s) that will be made available inside the *ngLet template.
    */
   @Input()
   public set ngLet(input: T) {
@@ -58,13 +61,6 @@ export class NgLetDirective<T> implements OnInit {
     this.cdr.markForCheck();
   }
 
-  /**
-   * Konstruktor
-   *
-   * @param vcr A direktíva host elementjéhez tartozó view referenciája
-   * @param cdr Az Angular változás kezelő service.
-   * @param templateRef A direktíva template-jének refereniája.
-   */
   constructor(
     private readonly vcr: ViewContainerRef,
     private readonly cdr: ChangeDetectorRef,
@@ -72,11 +68,7 @@ export class NgLetDirective<T> implements OnInit {
   ) {}
 
   /**
-   * Az Angular language service által használt segéd függvény, mely lehetővé teszi a tempalte béli type inferálást.
-   *
-   * @param _dir A direktíva osztály példánya
-   * @param ctx A direktívához tartozó kontextus objektum.
-   * @typedef T Az NgLet direktíva kontextusában tárolt érték típusa
+   * @ignore
    */
   public static ngTemplateContextGuard<T>(
     _dir: NgLetDirective<T>,
@@ -86,7 +78,7 @@ export class NgLetDirective<T> implements OnInit {
   }
 
   /**
-   * A direktíva és a tempalte inicializálása.
+   * @ignore
    */
   public ngOnInit(): void {
     this.vcr.createEmbeddedView(this.templateRef, this.context);
