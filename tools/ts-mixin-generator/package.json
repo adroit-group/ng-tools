@@ -14,7 +14,7 @@
     "help": "node ./dist/cli.js --help"
   },
   "bin": {
-    "ts-mixin": "./lci.js"
+    "ts-mixin": "./cli.js"
   },
   "keywords": [
     "typescript",

@@ -25,7 +25,7 @@
       "outputs": ["coverage/libs/ng-utils"],
       "options": {
         "jestConfig": "libs/ng-utils/jest.config.js",
-        "passWithNoTests": true
+        "passWithNoTests": false
       }
     },
     "lint": {
@@ -33,9 +33,12 @@
       "options": {
         "lintFilePatterns": [
           "libs/ng-utils/src/**/*.ts",
-          "libs/ng-utils/src/**/*.html"
+          "libs/ng-utils/src/**/*.html",
+          "libs/ng-utils/ngx-cdps-meter/**/*.ts",
+          "libs/ng-utils/ngx-cdps-meter/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

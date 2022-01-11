@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "composite": true,
     "outDir": "../../dist/out-tsc",
     "target": "es2015",
     "declaration": true,
@@ -10,6 +11,6 @@
     "lib": ["dom", "es2018"],
     "baseUrl": "./src/lib"
   },
-  "exclude": ["src/test-setup.ts", "**/*.spec.ts"],
+  "exclude": ["src/test-setup.ts", "**/*.spec.ts", "**/*.test.ts"],
   "include": ["**/*.ts"]
 }

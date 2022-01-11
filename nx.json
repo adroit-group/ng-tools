@@ -17,7 +17,8 @@
         "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "NjI0ZTQ0M2UtYjllZC00MzI3LThjZjItMDhlZjAzYTRhMGNkfHJlYWQtd3JpdGU=",
         "canTrackAnalytics": false,
-        "showUsageWarnings": true
+        "showUsageWarnings": true,
+        "parallel": 1
       }
     }
   },
@@ -29,13 +30,36 @@
       }
     ]
   },
-  "projects": {
-    "ng-util-demo": {
-      "tags": []
+  "cli": {
+    "analytics": "2aa8a555-aba3-45c8-8b66-d5e926aec314",
+    "defaultCollection": "@nrwl/angular"
+  },
+  "generators": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
     },
-    "ng-util-demo-e2e": {
-      "tags": [],
-      "implicitDependencies": ["ng-util-demo"]
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
     }
-  }
+  },
+  "defaultProject": "ng-util-demo"
 }

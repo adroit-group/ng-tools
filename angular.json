@@ -90,7 +90,8 @@
               "apps/ng-util-demo/src/**/*.ts",
               "apps/ng-util-demo/src/**/*.html"
             ]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -100,7 +101,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "ng-util-demo-e2e": {
       "root": "apps/ng-util-demo-e2e",
@@ -124,43 +126,14 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/ng-util-demo-e2e/**/*.{js,ts}"]
-          }
+          },
+          "outputs": ["{options.outputFile}"]
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["ng-util-demo"]
     },
     "ng-utils": "libs\\ng-utils",
     "ts-mixin-generator": "tools\\ts-mixin-generator"
-  },
-  "cli": {
-    "analytics": "2aa8a555-aba3-45c8-8b66-d5e926aec314",
-    "defaultCollection": "@nrwl/angular"
-  },
-  "generators": {
-    "@nrwl/angular": {
-      "application": {
-        "linter": "eslint"
-      },
-      "library": {
-        "linter": "eslint"
-      },
-      "storybook-configuration": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest"
-    },
-    "@nrwl/angular:component": {
-      "style": "scss"
-    }
-  },
-  "defaultProject": "ng-util-demo"
+  }
 }
