@@ -1,6 +1,6 @@
 import { Subscribable } from 'rxjs';
 
 /**
- * A direktíva által kezelt aszinkron értéke lehetséges típusa
+ * A type that describes the shape of async like values.
  */
 export type AsyncValue<T> = PromiseLike<T> | Subscribable<T>;

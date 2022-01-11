@@ -14,9 +14,6 @@ export class BusinessLogicExecutor {
     private readonly defaultThrowBehavior: boolean
   ) {}
 
-  /**
-   *
-   */
   public runBusinessLogic(
     businessLogicName: string,
     input: any,

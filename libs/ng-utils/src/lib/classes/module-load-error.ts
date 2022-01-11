@@ -9,15 +9,7 @@
  * ```
  */
 export class ModuleLoadError extends Error {
-  /**
-   * Konstrucktor
-   */
-  constructor(
-    /**
-     * A modul neve aminek a betöltése közben hiba történt
-     */
-    public readonly moduleName: string
-  ) {
+  constructor(public readonly moduleName: string) {
     super(
       `${moduleName} is already loaded. Make sure to only import it once directly or indirectly in AppModule`
     );

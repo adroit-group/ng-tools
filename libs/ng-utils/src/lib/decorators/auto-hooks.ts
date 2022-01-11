@@ -4,15 +4,12 @@
 import { ELifeCycleHook } from '../enums';
 
 /**
- * Egy speciális érték, melyet a dekorátor használ az automatikus bindolás megfelelő működéséhez.
- * Az érték célja az, hogy ha egy prototipus láncban több osztályon is szerepel az AutoHooks dekorátor,
- * akkor a később kiértékelt dekorátor megtalálja az elötte kiértékelt dekorátor
- * és ne történjen többszöri újra bindolás ugyan abban a prototipus láncban.
+ * @internal
  */
 const AUTO_HOOKS_MARK = '__auto-wire-up-angular-hooks__';
 
 /**
- * hook fn és az őt tartalmazó prototype
+ * @internal
  */
 interface TProtoHook {
   hook: () => any;
@@ -20,23 +17,15 @@ interface TProtoHook {
 }
 
 /**
- * Egy utility függvény, mely egy osztály konstruktorához rendeli annak a prototipus objektumát vagy ha azt nem találja null-t ad vissza.
- *
- * @param target
+ * @internal
  */
 const getParentProto = (target: Function): Object =>
   typeof target === 'function'
     ? Object.getPrototypeOf(target)?.prototype ?? null
     : null;
 
-// const getParentCtor = (target: Function): Function =>
-//   typeof target === 'function' ? Object.getPrototypeOf(target) ?? null : null;
-
 /**
- * Egy utility függvény, mely egy osztály konstruktoráról össze gyüjti az osztály prototipus láncán található függvényeket.
- *
- * @param target Az osztály konstruktor függvénye, melyről a függvényeket össze szeretnénk gyüjteni.
- * @param hookName A függvény neve, melyet meg szeretnénk találni.
+ * @internal
  */
 function gatherHookRecursively(
   target: Function,
@@ -44,10 +33,16 @@ function gatherHookRecursively(
 ): Array<TProtoHook> {
   const hookFns: Array<TProtoHook> = [];
 
-  const targetHookFn = target.prototype[hookName];
-  if (typeof targetHookFn === 'function') {
+  const targetHookFnDesc = Object.getOwnPropertyDescriptor(
+    target.prototype,
+    hookName
+  );
+  if (
+    typeof targetHookFnDesc === 'object' &&
+    typeof targetHookFnDesc.value === 'function'
+  ) {
     hookFns.push({
-      hook: targetHookFn,
+      hook: targetHookFnDesc.value,
       proto: target.prototype,
     });
   }
@@ -71,12 +66,16 @@ function gatherHookRecursively(
       `);
     }
 
-    const parentHookFn = (parentProto as Record<PropertyKey, any>)[
+    const parentHookFnDesc = Object.getOwnPropertyDescriptor(
+      parentProto,
       hookName
-    ] as () => any;
-    if (typeof parentHookFn === 'function') {
+    );
+    if (
+      typeof parentHookFnDesc === 'object' &&
+      typeof parentHookFnDesc.value === 'function'
+    ) {
       hookFns.push({
-        hook: parentHookFn,
+        hook: parentHookFnDesc.value,
         proto: parentProto,
       });
     }
@@ -91,20 +90,26 @@ function gatherHookRecursively(
   return hookFns.reverse();
 }
 
+/**
+ * @internal
+ */
 function shouldAugmentPreV10Hooks(
-  target: Function,
+  targetCtor: Function,
   hookName: string,
   recognizedLifeCycleHookMethods: Array<string>
 ): boolean {
   const isLifecycleHookMethod =
     recognizedLifeCycleHookMethods.includes(hookName);
 
-  return isLifecycleHookMethod && (target as Record<PropertyKey, any>)['ɵcmp'];
+  return isLifecycleHookMethod && !!(targetCtor as any)['ɵcmp'];
 }
 
+/**
+ * @internal
+ */
 function augmentPreV10Hooks(
   hookName: string,
-  target: Function,
+  targetCtor: Function,
   callableHooksWithOwningPrototypes: Array<TProtoHook>
 ) {
   const compFeatureName = hookName
@@ -113,7 +118,7 @@ function augmentPreV10Hooks(
     .map((char, i) => (i === 0 ? char.toLowerCase() : char))
     .join('');
 
-  (target as Record<PropertyKey, any>)['ɵcmp'][compFeatureName] = function (
+  (targetCtor as any)['ɵcmp'][compFeatureName] = function (
     ...args: Array<any>
   ) {
     callableHooksWithOwningPrototypes.forEach((hookWithOwningPrototype) => {
@@ -130,14 +135,15 @@ function augmentPreV10Hooks(
   };
 }
 
-function augmentV10Hooks(
+/**
+ * @internal
+ */
+function augmentHooksInV10Mode(
   hookName: string,
-  target: Function,
+  target: any,
   callableHooksWithOwningPrototypes: Array<TProtoHook>
 ) {
-  (target as Record<PropertyKey, any>)[hookName] = function (
-    ...args: Array<any>
-  ) {
+  target[hookName] = function (...args: Array<any>) {
     callableHooksWithOwningPrototypes.forEach((hookWithOwningPrototype) =>
       hookWithOwningPrototype.hook.apply<any, any[], any>(this, args)
     );
@@ -145,18 +151,23 @@ function augmentV10Hooks(
 }
 
 /**
- * A mixin-eket használó komponensek és direktívák életciklus metódusainak megfelelő működésért felelős dekorátor.
- * A dekorátor an Angular specifikus életciklus metódusok (és a paraméterként megadott további metódusok) automatikus bind-olását végzi el.
- * A bind-olás közben a prototipus lánc egyes elemein jelen lévő metódusokat köti össze,
- * így az azonos nevű metódusok a gyerek példány metódusának meghívása során sorban meghívpdnak
- * a konstructor hívások láncolatához hasonlóan.
- *
- * @param additionalHooks Egy tömb mely az Angular életciklus metódusain kivül további bind-olandó metódusok neveit tartalmazza.
- * (opcionális)
- * A dekorátorral ellátott osztály nem hívhatják saját maguk az Angular specifikus életciklus metódusaik
- * és a további bindolt metódusaik super változatait a függvény türzsükben, mivel ez az adott metódusok többszöri meghívását eredméynezné.
- * Az Angular ngOnChanges életciklus metódusa nem kerül automatikus meghívásra mivel az nem kapja meg
- * a megfelelő changes paramétert (Angular v10 elött).
+ * A decorator which ensures that the lifecycle hooks of components and directives that use mixins are called properly.
+ * The decorator applies automatic binding for the Angular specific lifecycle hook and the additionally supplied methods on classes  extending mixin functions by linking up the existing methods on the classes' prototype chains.
+ * This ensures that both the components' own methods and any other method on the mixins' prototypes are called in the same order in which constructor calls would do. (Starting with the last mixin class and calling continuosly toward the actual class that extends the mixins)
+ * @param additionalHooks An array of method names to be bound on top of the Angular lifecycle hooks
+ * @remarks Nor the classes decorated with AutoHooks decorator neither the mixin or base classes applied to it are allowed to manually call the super version of the methods being bound.
+ * That would result in unintended and multiply invocation of said methods.
+ * The ngOnChanges hook is exempt from this behaviour when the decorator is used with an Angular version less than v10 as binding this lifecycle hooks results in a faulty behavior where the method does not receive the changes parameter object.
+ * If a class's prototype chain contains real classes apart from the applied mixins those classes cannot use AutoHooks in tandem with the child class's decorator.
+ * @example ```ts
+ * \@Component({
+ *   selector: 'my-comp',
+ *   templateUrl: './my.component.html',
+ *   styleUrls: ['./my.component.scss'],
+ * })
+ * \@AutoHooks()
+ * export class MyComp extends SubscriptionHandlerMixin() implements OnInit { ... }
+ * ```
  */
 export function AutoHooks(additionalHooks: Array<string> = []): ClassDecorator {
   const recognizedLifeCycleHookMethods = Object.values(
@@ -165,13 +176,12 @@ export function AutoHooks(additionalHooks: Array<string> = []): ClassDecorator {
 
   const hooksToWireUp = [...recognizedLifeCycleHookMethods, ...additionalHooks];
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
   return (target: Function) => {
     if (typeof target !== 'function') {
       throw new TypeError(`
-                AutoHooks decorator expected a class constructor function but got: ${target}!
-                Make sure to only use AutoHooks as a class decorator.
-            `);
+        AutoHooks decorator expected a class constructor function but got: ${target}!
+        Make sure to only use AutoHooks as a class decorator.
+      `);
     }
 
     for (const hookName of hooksToWireUp) {
@@ -192,13 +202,21 @@ export function AutoHooks(additionalHooks: Array<string> = []): ClassDecorator {
       // ? We have to hook into Angular's component feature's private api to properly modify the lifecycle hooks
       // ? since the AOT generated code contains the _decorate function call after the component class definitions
       // ? Angular do not recognize the a decorate has modified the component's lifecycle hooks.
-      shouldAugmentPreV10Hooks(target, hookName, recognizedLifeCycleHookMethods)
-        ? augmentPreV10Hooks(
-            hookName,
-            target,
-            callableHooksWithOwningPrototypes
-          )
-        : augmentV10Hooks(hookName, target, callableHooksWithOwningPrototypes);
+      if (
+        shouldAugmentPreV10Hooks(
+          target,
+          hookName,
+          recognizedLifeCycleHookMethods
+        )
+      ) {
+        augmentPreV10Hooks(hookName, target, callableHooksWithOwningPrototypes);
+      }
+
+      augmentHooksInV10Mode(
+        hookName,
+        target.prototype,
+        callableHooksWithOwningPrototypes
+      );
     }
 
     Object.defineProperty(target, Symbol.for(AUTO_HOOKS_MARK), {

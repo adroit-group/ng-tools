@@ -8,3 +8,6 @@ export {
   NG_SUBSCRIBE_MISSING_STREAM_BEHAVIOR,
 } from './ng-subscribe.token';
 export { PIPEABLE_EVENT_HANDLER } from './pipeable-event-handler.token';
+export { DOTTABLE_EVENT_METHOD_ALIAS } from './dottable-event-method-alias.token';
+export { WINDOW } from './window-ref.token';
+export { NAVIGATOR } from './navigator-ref.token';

@@ -6,20 +6,11 @@ import { BUSINESS_LOGIC_CONFIG } from '../tokens';
   providedIn: 'root',
 })
 export class BusinessLogicRegistry {
-  /**
-   * A regisztrált üzleti logikák a megfelelő függségekkel kiegészítve.
-   */
   readonly #logics = new Map<
     string,
     Array<IBusinessLogicDefinition<any, any>>
   >();
 
-  /**
-   * Konstruktor
-   *
-   * @param injector Az Angular DI rendszer által biztotított injektor
-   * @param businessLogicConfigs Az alkalamzásban regisztrált üzleti logikák
-   */
   constructor(
     private readonly injector: Injector,
     @Optional()
@@ -31,9 +22,6 @@ export class BusinessLogicRegistry {
     }
   }
 
-  /**
-   * A service inicializálása
-   */
   public init(): void {
     for (const { type, logics } of this.businessLogicConfigs) {
       this.#logics.set(type, this.resolveDepsForBusinessLogics(logics));
@@ -50,11 +38,6 @@ export class BusinessLogicRegistry {
     return this.#logics.has(businessLogicName);
   }
 
-  /**
-   * A regisztrált üzleti logikák függőségeinek összeszedése
-   *
-   * @param logics A regisztrált üzleti logikák
-   */
   private resolveDepsForBusinessLogics<
     T extends IBusinessLogicDefinition<any, any>
   >(logics: Array<T>): Array<T> {

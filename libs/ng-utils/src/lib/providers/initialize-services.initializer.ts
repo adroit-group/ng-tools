@@ -1,19 +1,26 @@
-import { APP_INITIALIZER, Provider } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  Provider,
+  Injector,
+  InjectFlags,
+} from '@angular/core';
 import { IInitializable } from '../interfaces';
 import { INITIALIZABLE_SERVICE } from '../tokens';
 
-/**
- * Egy initializer token, mely az alkalamzás indításakor összegyüjti az inicializálható service osztályokat
- * és azokon sorban meghívja az init függvényt az IInitializable interface alapján.
- */
 export const INITIALIZABLE_SERVICES_INITIALIZER: Provider = {
   provide: APP_INITIALIZER,
-  useFactory: (initializables: Array<IInitializable>) => (): void => {
-    const servicesToInitializer = Array.isArray(initializables)
-      ? initializables
-      : [];
+  useFactory: (injector: Injector) => (): void => {
+    const initializables = injector.get<IInitializable[]>(
+      INITIALIZABLE_SERVICE,
+      undefined,
+      InjectFlags.Optional
+    );
 
-    for (const initializable of servicesToInitializer) {
+    if (!Array.isArray(initializables)) {
+      return;
+    }
+
+    for (const initializable of initializables) {
       if (typeof initializable?.init !== 'function') {
         console.error(`
           Service: ${initializable?.constructor?.name} is registered as an initializable service
@@ -25,6 +32,6 @@ export const INITIALIZABLE_SERVICES_INITIALIZER: Provider = {
       initializable.init();
     }
   },
-  deps: [INITIALIZABLE_SERVICE],
+  deps: [Injector],
   multi: true,
 };
