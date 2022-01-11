@@ -1,3 +1,4 @@
+export { IDottableEventHandlerAlias } from './dottable-event-handler-alias';
 export {
   IBusinessLogicConfig,
   IBusinessLogicContext,

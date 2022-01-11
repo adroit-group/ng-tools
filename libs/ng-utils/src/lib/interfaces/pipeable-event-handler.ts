@@ -4,7 +4,7 @@ import { PipeableEventHandlerOperationType } from '../types';
 export interface IPipeableEventHandler {
   name: string;
   operatesOn: PipeableEventHandlerOperationType;
-  handler: <T extends any = Event, U extends any = void>(
+  handler: <T = Event, U = void>(
     event: T,
     stopSignal: Subject<void>,
     ...handlerArgs: unknown[]
