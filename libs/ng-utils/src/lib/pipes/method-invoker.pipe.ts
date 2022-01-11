@@ -1,42 +1,68 @@
 import { Inject, Optional, Pipe, PipeTransform } from '@angular/core';
-import { METHOD_INVOKER_PIPE_HOST } from '../tokens';
+import { METHOD_INVOKER_PIPE_HOST } from '../tokens/method-invoker-pipe-host.token';
 import { InvokableMethod } from '../types';
 
+// TODO: Add content arg to transform so that this can be set more easily and explicitly than with the method invoker pipe host token
+
 /**
- * Egy meta pipe, mely más pipe-ok helyettesítésére szolgál.
- * A pipe működésének lényege, hogy a pipe által végrehajtandó metódust nem egy külön pipeban adjuk meg hanem oda adjuk ennek a pipenak mint bemenő paraméter.
- * A pipe a megkapott függvény hívja meg, a megadott inputokat valamint az opcionálisan megadható kontextsut használva.
- * Ha megadunk kontextust, akkor egy adott komponens vagy direktív osztály példányának a this kontextusát tudjuk használni a pipe által meghívott függvényen belül.
- * Ennek akkor van jelentősége, ha a pipe, olyan komponens metódust hív meg, mely használ a komponens adatai vagy metódusait közül valamit.
+ * A meta pipe that aims to replace most or all other pipes in your application.
+ * This pipe take a function and optionally it's arguments as parameter(s) an executes it.
+ * A context object can be supply to the pipe through Angular's DI system
+ * in turn enabling the usage and reference of the this parameter of the component or directive that defined the function.
  *
+ * @example
+ *
+ * Without context
+ *```html
+ * <p> {{ getRelativeDateTime | invoke: orderDate }} </p>
+ *```
+ *
+ * With context
+ *```ts
+ * \@component({
+ *  ...
+ *  providers: [
+ *    {
+ *      provide: METHOD_INVOKER_PIPE_HOST,
+ *      useExisting: MyComponent
+ *    }
+ *  ]
+ * })
+ * export class MyComponent {
+ *  ...
+ *
+ *  public title = 'My App';
+ *
+ *  public componentMethodThatUsesThis(): string {
+ *    return this.title;
+ *  }
+ * }
+ *```
+ *```html
+ * <p> {{ componentMethodThatUsesThis | invoke }} </p>
+ *```
  */
 @Pipe({
   name: 'invoke',
 })
 export class MethodInvokerPipe implements PipeTransform {
-  /**
-   * konstruktor
-   *
-   * @param host Az opcionálisan rendelkezésre álló host kontextus
-   */
   constructor(
     @Optional()
     @Inject(METHOD_INVOKER_PIPE_HOST)
     private readonly host?: unknown
   ) {}
 
-  /**
-   * A PipeTransform interface implementációja
-   *
-   * @param value A meghívandó függvény első bementi paramétere (value)
-   * @param method a meghívandó függvény
-   * @param restArgs a meghívandó függvény többi paraméterét tartalmazó lista
-   */
-  public transform<T extends unknown, U>(
+  public transform<T, U>(
     value: T,
     method: InvokableMethod<T, U>,
     ...restArgs: Array<unknown>
   ): U {
-    return method?.call(this.host, value, ...(restArgs ?? []));
+    if (typeof method !== 'function') {
+      throw new Error(
+        `MethodInvoker Pipe expected a function but got: ${method}`
+      );
+    }
+
+    return method.call(this.host, value, ...(restArgs ?? []));
   }
 }
