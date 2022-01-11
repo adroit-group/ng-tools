@@ -1,22 +1,7 @@
 import { Subject } from 'rxjs';
-import { Constructor } from '../interfaces';
 import { MixinType } from '../types';
-import { MediaObserverMixin } from './media-observer.mixin';
-
-/**
- * A SubscriptionHandlerMixin által szolgáltatott publikus osztyál elemeket leíró interface
- */
-interface ISubscriptionHandler {
-  /**
-   * A streamek gyüjtő subscription-ja.
-   * Erről fog a Mixin-el ellátott osztály automatikus leiratkozni az ngOnDestroy hook-ban.
-   */
-  readonly onDestroy$: Subject<void>;
-  /**
-   * A direktíva/komponens destrukciós logikáját tartalmazó Angular life cycle hook
-   */
-  ngOnDestroy(): void;
-}
+import { Constructor } from '../interfaces';
+import { mixinBase } from '../utils/mixin-base';
 
 /**
  * A Mixin function that provides functionality related to handling subscriptions.
@@ -32,39 +17,22 @@ interface ISubscriptionHandler {
  *  }
  * ```
  */
-export function SubscriptionHandlerMixin<
-  T extends Constructor<any, Array<any>> = FunctionConstructor
->(base?: T): MixinType<T, ISubscriptionHandler> {
-  const Base = (base ?? class {}) as Constructor<any, Array<any>>;
-
-  return class SubscriptionHandler
-    extends MediaObserverMixin(Base)
-    implements ISubscriptionHandler
-  {
-    public readonly onDestroy$ = new Subject<void>();
-
+export function SubscriptionHandlerMixin<T extends Constructor<any, unknown[]>>(
+  base?: T
+) {
+  const SubscriptionHandler = class extends mixinBase(base) {
     /**
-     * a helyi onDestroy$ subjectet zárja le egy emit után.
-     * A komponens belső stream-jeit zárjuk le általában erre a subjectre figyelve, így a streamek lezáródnak, amikor a komponens életciklusa véget ér
+     * The Subscription handler's subject that signals when the component's or directive's onDestroy hook is called to enable automatic unsubscribe logic.
      */
+    public readonly _onDestroy$ = new Subject<void>();
+
+    public readonly onDestroy$ = this._onDestroy$.asObservable();
+
     public ngOnDestroy(): void {
-      this.onDestroy$.next();
-      this.onDestroy$.complete();
+      this._onDestroy$.next();
+      this._onDestroy$.complete();
     }
-  } as any;
+  };
+
+  return SubscriptionHandler as MixinType<typeof SubscriptionHandler, T>;
 }
-
-// class Handler {}
-
-// class SubscriptionHandler extends Handler implements ISubscriptionHandler {
-//   public readonly onDestroy$ = new Subject<void>();
-
-//   /**
-//    * a helyi onDestroy$ subjectet zárja le egy emit után.
-//    * A komponens belső stream-jeit zárjuk le általában erre a subjectre figyelve, így a streamek lezáródnak, amikor a komponens életciklusa véget ér
-//    */
-//   public ngOnDestroy(): void {
-//     this.onDestroy$.next();
-//     this.onDestroy$.complete();
-//   }
-// }
