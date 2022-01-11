@@ -1,5 +1,5 @@
 import { AdroitNgUtilsModule } from '@adroit/ng-utils';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
@@ -8,4 +8,8 @@ import { AppComponent } from './app.component';
   imports: [BrowserModule, AdroitNgUtilsModule.forRoot()],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(injector: Injector) {
+    (window as any)['AppModuleInjector'] = injector;
+  }
+}
