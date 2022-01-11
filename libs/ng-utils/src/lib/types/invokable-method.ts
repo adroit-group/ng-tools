@@ -1,10 +1,4 @@
 /**
- * A method invoker Pipe által meghívható függvények alakjét leíró típus
- *
- * @param arg0 a meghívandó függvény első paramétere
- * @param restArgs a meghívandó függvény többi paraméterét tartalmazó lista
+ * A type that describes the shape of a function invokable by the MethodInvokerPipe
  */
-export type InvokableMethod<T extends unknown, U> = (
-  arg0: T,
-  ...restArgs: Array<unknown>
-) => U;
+export type InvokableMethod<T, U> = (arg0: T, ...restArgs: Array<unknown>) => U;

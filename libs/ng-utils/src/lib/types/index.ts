@@ -1,5 +1,6 @@
-export { AsyncValue } from './async-input';
+export { AsyncValue } from './async-value';
 export { HashMap } from './hashmap';
 export { InvokableMethod } from './invokable-method';
 export { MixinType } from './mixin-type';
+export { ObservifyType } from './observify-type';
 export { PipeableEventHandlerOperationType } from './pipeable-event-handler-operation-type';

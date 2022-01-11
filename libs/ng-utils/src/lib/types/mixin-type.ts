@@ -1,59 +1,96 @@
-import { Constructor } from 'interfaces';
+import { MappedToTuple } from './mapped';
+import { CastToTuple, ConcatTuples, TupleToMapped } from './tuple';
+import { ReturnTypeUnsafe } from '../interfaces/constructor';
 
 /**
  * @summary Given a Constructor type gets the instance type created by the constructor.
  */
-type PrototypeOf<T> = T extends Constructor<infer P, any[]> ? P : never;
+export type PrototypeOf<T> = T extends { prototype: infer P } ? P : unknown;
+
+/**
+ * Given a tuple that contains a rest type as it's last element (usually a constructor parameter type) returns a new tuple type with the same types in it except the last rest element.
+ * @example
+ * type testDropRestParams =
+ *  DropRestParams<[string, number, ...any[]]>; // => [string, number];
+ */
+type DropRestParams<T extends any[]> = MappedToTuple<TupleToMapped<T>>;
 
 /**
  * @summary Given a Constructor type gets the parameters expected by it.
  */
-type CtorParams<T> = T extends Constructor<any, infer Params> ? Params : [];
+type CtorParams<T> = T extends MixinConstructor<any, infer Params>
+  ? CastToTuple<Params>
+  : [];
 
-/**
- * @summary Concatenates two tuples together.
- */
-type ConcatTuples<T extends any[], U extends any[]> = [...T, ...U];
+// ? Working version
+export type CopyStruct<T> = Pick<T, keyof T>;
 
-/**
- * @summary Asserts tha the given type T is a tuple.
- */
-type CastToTuple<T> = T extends any[] ? T : never;
+// ? Working version
+type ParametersUnsafe<T> = T extends new (...args: infer P) => any ? P : [];
 
 /**
  * @summary Composes two types together the same way the ES spread operator does.
  * @description While merging the provided types overrides the common properties in the correct order.
  */
-type ComposeTypes<T1, T2> = {
-  [K2 in keyof T2]: K2 extends keyof T1 ? T1[K2] : T2[K2];
-} &
-  { [K1 in keyof T1]: T1[K1] } &
-  T2 &
-  T1;
+// ? Working version
+type ComposeTypes<Mixin, Base> = unknown extends Base
+  ? Mixin
+  : unknown extends Mixin
+  ? Base
+  : {
+      [KB in keyof Base]: KB extends keyof Mixin ? Mixin[KB] : Base[KB];
+    } &
+      { [KM in keyof Mixin]: Mixin[KM] };
 
-/**
- * @summary Merges the types supplied in the supplied tuple recursively.
- * @description While merging the types maintains their correct order as in a classical inheritance.
- * @remarks The merged types override each others common properties in the proper order.
- */
-type Compose<
-  T extends any[],
-  TCurr extends any = T[0],
-  Acc extends any = Record<any, any>
-> = TCurr extends undefined ? Acc : ComposeTypes<Acc, TCurr>;
+// ? Working version
+export declare type ComposePrototypes<Mixin, Base> = {
+  prototype: InferProto<Base> & InferProto<Mixin>;
+};
+
+// ? Working version
+type ComposeCtors<Mixin, Base> = Omit<Base, 'prototype'> &
+  Omit<Mixin, 'prototype'>;
+// type ComposeCtors<Mixin, Base> = Omit<ComposeTypes<Mixin, Base>, 'prototype'>;
+
+// ? Working version
+export type ComposeClasses<Mixin, Base> = ComposeCtors<Mixin, Base> &
+  ComposePrototypes<Mixin, Base>;
+
+// ? Working version
+type AppendRestIfNeeded<T extends any[]> = T['length'] extends 0
+  ? T
+  : [...T, ...any[]];
+
+// ? Working version
+type MixinCtorParams<Mixin, Base> = AppendRestIfNeeded<
+  ConcatTuples<
+    DropRestParams<CtorParams<Mixin>>,
+    DropRestParams<CtorParams<Base>>
+  >
+>;
+
+// ? Working version
+type InferProto<T> = ReturnTypeUnsafe<T> extends {
+  prototype: infer Proto;
+}
+  ? Proto
+  : ReturnTypeUnsafe<T>;
+
+// ? Working version
+export declare type MixinConstructor<
+  T,
+  P = ParametersUnsafe<T>
+> = CopyStruct<T> & {
+  new (...args: CastToTuple<P>): InferProto<T>;
+  prototype: InferProto<T>;
+};
 
 /**
  * @summary The special constructor type used by mixin functions.
  * Returns a regular constructor type with the appropriate instance type and constructor parameters
  * after merging the types of the supplied mixin functions' results.
  */
-export type MixinType<
-  Base,
-  Mixin,
-  Params extends any[] = []
-> = Base extends FunctionConstructor
-  ? Constructor<Mixin, Params>
-  : Constructor<
-      ComposeTypes<Mixin, PrototypeOf<Base>>,
-      ConcatTuples<Params, CastToTuple<CtorParams<Base>>>
-    >;
+// ? Working version
+export type MixinType<Mixin, Base> = Base extends new (...args: any[]) => any
+  ? MixinConstructor<ComposeClasses<Mixin, Base>, MixinCtorParams<Mixin, Base>>
+  : MixinConstructor<Mixin>;
