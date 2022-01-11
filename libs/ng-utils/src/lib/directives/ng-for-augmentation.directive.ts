@@ -1,46 +1,45 @@
 /* eslint-disable @angular-eslint/directive-selector */
-import { NgForOf } from '@angular/common';
 import {
   Directive,
   EmbeddedViewRef,
-  Host,
   Input,
   OnChanges,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { TrackByHandlerMixin } from 'mixins';
 
+/**
+ * A utility directive that enhances Angular's *ngFor directive with extra functionality.
+ * The directive is implicitly applied every time the original *ngFor is used and provides two additional template options for *ngFor.
+ * You can supply both a no array and an empty array template to be rendered.
+ * @example ```html
+ * <p *ngFor="let item of items$ | async else loading empty blank">
+ *   {{item}}
+ * </p>
+ * ```
+ * @credit
+ * Alexander Inkin - https://medium.com/@waterplea
+ *
+ * https://medium.com/angularwave/non-binary-ngif-cfdf7c474852
+ */
 @Directive({
-  selector: '[ngFor][ngForOf][ngForEmpty]',
+  selector: '[ngFor][ngForOf][ngForEmpty],[ngFor][ngForOf][ngForElse]',
 })
-export class NgForAugmentationDirective<T>
-  extends TrackByHandlerMixin()
-  implements OnChanges
-{
+export class NgForAugmentationDirective<T> implements OnChanges {
   @Input()
-  public ngForOf: Array<T> = [];
+  public ngForOf?: Array<T>;
 
   @Input()
-  public ngForEmpty!: TemplateRef<unknown>;
+  public ngForEmpty?: TemplateRef<unknown>;
 
   @Input()
   public ngForElse?: TemplateRef<unknown>;
 
   private ref?: EmbeddedViewRef<unknown>;
 
-  constructor(
-    private readonly vcr: ViewContainerRef,
-    @Host() private readonly directive: NgForOf<T>
-  ) {
-    super();
-  }
+  constructor(private readonly vcr: ViewContainerRef) {}
 
   public ngOnChanges(): void {
-    if (typeof this.directive.ngForTrackBy !== 'function') {
-      this.directive.ngForTrackBy = this.trackBy;
-    }
-
     this.ref?.destroy();
 
     if (!Array.isArray(this.ngForOf) && this.ngForElse instanceof TemplateRef) {
