@@ -3,4 +3,4 @@ export { HashMap } from './hashmap';
 export { InvokableMethod } from './invokable-method';
 export { MixinType } from './mixin-type';
 export { ObservifyType } from './observify-type';
-export { PipeableEventHandlerOperationType } from './pipeable-event-handler-operation-type';
+
