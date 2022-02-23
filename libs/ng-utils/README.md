@@ -34,7 +34,6 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
       - [NgRenderInServer Directive](#ngrenderinserver-directive)
   - [Services](#services)
     - [Pipeable Events Plugin](#pipeable-events-plugin)
-    - [Business Logic Executor & Registry](#business-logic-executor--registry)
     - [Platform Observer](#platform-observer)
   - [Pipes](#pipes)
     - [Method Invoker](#method-invoker)
@@ -344,8 +343,6 @@ A structural directive that only renders it's template if the application is ran
 ## Services
 
 ### Pipeable Events Plugin
-
-### Business Logic Executor & Registry
 
 ### Platform Observer
 
