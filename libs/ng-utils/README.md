@@ -2,7 +2,7 @@
  <img width="0" height="0" src="https://adroitgroup.io/wp-content/uploads/2019/02/web_logo.png?sanitize=true">
 </p>
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-48-orange.svg?style=flat-square)](#contributors)[![spectator](https://img.shields.io/badge/tested%20with-spectator-2196F3.svg?style=flat-square)]()[![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg?style=flat-square)]()[![commitizen](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)]()[![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)]()[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)[![Build Status](https://travis-ci.org/adroit/ng-tools.svg?branch=master)](https://travis-ci.org/adroit/ng-tools)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)[![spectator](https://img.shields.io/badge/tested%20with-spectator-2196F3.svg?style=flat-square)]()[![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg?style=flat-square)]()[![commitizen](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)]()[![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)]()[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)[![Build Status](https://travis-ci.org/adroit/ng-tools.svg?branch=master)](https://travis-ci.org/adroit/ng-tools)
 
 # NG Utils
 
@@ -33,7 +33,6 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
       - [NgRenderInBrowser Directive](#ngrenderinbrowser-directive)
       - [NgRenderInServer Directive](#ngrenderinserver-directive)
   - [Services](#services)
-    - [Pipeable Events Plugin](#pipeable-events-plugin)
     - [Platform Observer](#platform-observer)
   - [Pipes](#pipes)
     - [Method Invoker](#method-invoker)
@@ -42,7 +41,6 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
     - [Media Observer](#media-observer)
     - [TrackBy Handler](#trackby-handler)
   - [Development environment](#development-environment)
-  - [Publishing](#publishing)
 
 ## Installation
 
@@ -342,9 +340,10 @@ A structural directive that only renders it's template if the application is ran
 
 ## Services
 
-### Pipeable Events Plugin
-
 ### Platform Observer
+
+An Injectable service that helps to identify the platform where the application runs.
+
 
 ## Pipes
 
@@ -455,7 +454,3 @@ class MyComp extends TrackByHandlerMixin() {
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 Run `npm run packagr` to build the library. The build artifacts will be stored in the `dist` directory.
-
-## Publishing
-
-Run `cd dist && npm publish` command to publish the package.
