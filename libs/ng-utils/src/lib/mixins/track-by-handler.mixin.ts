@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Constructor } from '../interfaces';
 import { mixinBase } from '../utils/mixin-base';
 import { MixinType } from '../types';

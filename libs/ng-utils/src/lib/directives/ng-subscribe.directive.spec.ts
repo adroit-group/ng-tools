@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
 import { fakeAsync } from '@angular/core/testing';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator';

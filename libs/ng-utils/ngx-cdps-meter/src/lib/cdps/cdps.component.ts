@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { OnInit } from '@angular/core';
 import {
   Component,

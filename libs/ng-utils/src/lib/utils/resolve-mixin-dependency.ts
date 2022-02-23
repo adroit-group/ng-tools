@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injector, InjectFlags, ProviderToken } from '@angular/core';
 import { MixinDependencyResolverModule } from '../mixin-dependency-resolver.module';
 

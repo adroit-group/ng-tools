@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CastToNumber, Increase } from './number';
 import { UnionToTuple } from './union';
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable @typescript-eslint/ban-types */

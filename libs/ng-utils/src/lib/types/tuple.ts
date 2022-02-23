@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Increase } from './number';
-import { UnionToIntersection, UnionToTuple } from './union';
+import { UnionToIntersection } from './union';
 
 /**
  * @summary Asserts tha the given type T is a tuple.
@@ -37,18 +39,18 @@ export type Head<T extends any[]> = T extends [...infer Head, any]
 
 export type TupleToMapped<
   T extends any[],
-  Acc extends any = {},
+  Acc = {},
   Index extends number = 0
 > = T extends [infer Head, ...infer Tail]
   ? TupleToMapped<Tail, Acc & Record<Index, Head>, Increase<Index>>
   : Acc;
 
-type testTupleToMapped = TupleToMapped<[string, number, ...any[]]>;
-type t12 = testTupleToMapped extends {} ? 1 : 0;
+// type testTupleToMapped = TupleToMapped<[string, number, ...any[]]>;
+// type t12 = testTupleToMapped extends {} ? 1 : 0;
 
-type testTupleToMappedWithRest = TupleToMapped<[string, boolean, ...any[]]>;
-type mappedKeysAsUnion = keyof testTupleToMappedWithRest;
-type mappedKeysAsTuple = UnionToTuple<mappedKeysAsUnion>;
+// type testTupleToMappedWithRest = TupleToMapped<[string, boolean, ...any[]]>;
+// type mappedKeysAsUnion = keyof testTupleToMappedWithRest;
+// type mappedKeysAsTuple = UnionToTuple<mappedKeysAsUnion>;
 
 // type testMappedTpoTupleMapped = MappedToTupleMapper<
 //   mappedKeysAsTuple,

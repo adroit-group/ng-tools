@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * A utility function used by mixin functions to ensure the returned mixin class expression extends from either the received base class or an empty class if no base if provided.
  *

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CastToTuple, Prepend, Tail } from './tuple';
 
 /**
  * A type that casts another type to number or returns never.
  */
-export type CastToNumber<N extends any> = N extends number ? N : never;
+export type CastToNumber<N> = N extends number ? N : never;
 
 /**
  * A utility type that turn a number type to a tuple with the same length

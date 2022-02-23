@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Subject } from 'rxjs';
 import { MixinType } from '../types';
 import { Constructor } from '../interfaces';

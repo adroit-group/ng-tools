@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TrackByHandlerMixin } from './track-by-handler.mixin';
 
 describe('TrackByHandlerMixin', () => {

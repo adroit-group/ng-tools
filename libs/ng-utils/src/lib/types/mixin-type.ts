@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MappedToTuple } from './mapped';
 import { CastToTuple, ConcatTuples, TupleToMapped } from './tuple';
 import { ReturnTypeUnsafe } from '../interfaces/constructor';

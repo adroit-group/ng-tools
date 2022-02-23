@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { MediaObserverMixin } from './media-observer.mixin';
 import { MixinDependencyResolverModule } from '../mixin-dependency-resolver.module';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MediaObserver as FlexMediaObserver } from '@angular/flex-layout';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Constructor } from '../interfaces';
