@@ -38,7 +38,7 @@
     "version-lib": "cd libs/ng-utils && npm version --no-git-tag-version",
     "postversion-lib": "cd ..\\..\\",
     "prepublish-lib": "npm run build:lib && npm run version-lib",
-    "publish-lib": "npm publish dist/libs/ng-utils --access public --dry-run",
+    "publish-lib": "npm publish ./dist/libs/ng-utils --access public",
     "test:lib": "ng test ng-utils",
     "test:lib:dev": "ng test ng-utils --watch=true",
     "test:lib:coverage": "ng test ng-utils --coverage",
