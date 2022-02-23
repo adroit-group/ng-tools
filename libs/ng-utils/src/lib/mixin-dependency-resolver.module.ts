@@ -19,7 +19,7 @@ export class MixinDependencyResolverModule extends ASingletonModule {
   private static [injectorSym]: Injector;
 
   constructor(
-    @Optional() @SkipSelf() protected self: MixinDependencyResolverModule,
+    @Optional() @SkipSelf() self: MixinDependencyResolverModule,
     injector: Injector
   ) {
     super(self);

@@ -9,6 +9,9 @@
  * ```
  */
 export class ModuleLoadError extends Error {
+  /**
+   * @param moduleName The name of the NgModule which could no be loaded.
+   */
   constructor(public readonly moduleName: string) {
     super(
       `${moduleName} is already loaded. Make sure to only import it once directly or indirectly in AppModule`

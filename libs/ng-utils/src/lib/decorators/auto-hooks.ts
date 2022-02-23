@@ -12,7 +12,13 @@ const AUTO_HOOKS_MARK = '__auto-wire-up-angular-hooks__';
  * @internal
  */
 interface TProtoHook {
-  hook: () => any;
+  /**
+   * @internal
+   */
+  hook: () => unknown;
+  /**
+   * @internal
+   */
   proto: object;
 }
 

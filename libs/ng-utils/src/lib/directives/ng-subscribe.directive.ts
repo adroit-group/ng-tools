@@ -32,27 +32,26 @@ import {
 import { HashMap } from '../types';
 
 /**
- * Az NgSubscribe direktíva által használt kontextus objektum.
- * Ez az objektum tartja számon a definiált tempalte változó értékét és típusát.
+ * The object available in the the *ngSubscribe directive's template.
  */
 export class NgSubscribeContext<V extends unknown | Array<unknown>> {
   /**
-   * A tempalte kontextus 'implicit' értéke.
+   * The implicitly bindable property of the context object.
    */
   public $implicit?: V;
 
   /**
-   * A tempalte kontextus nevesített értéke.
+   * The name-sake property of the context object.
    */
   public ngSubscribe?: V;
 
   /**
-   * A stream-ből érkező hiba
+   * The error received from the bound Observable or Promise
    */
   public error?: Error | string;
 
   /**
-   * Befejeződött-e a stream flag
+   * Is the bound Observable closed or Promise resolved
    */
   public completed = false;
 }
@@ -63,7 +62,7 @@ export class NgSubscribeContext<V extends unknown | Array<unknown>> {
  */
 export class NgSubscribeErrorContext {
   /**
-   * A direktíva inputjában történt hiba
+   * The implicitly bindable property of the context object.
    */
   public $implicit?: Error;
 }
@@ -93,7 +92,7 @@ const combinerMap: HashMap<
 };
 
 /**
- * A direktíva által kezelt aszinkron értéke lehetséges típusa
+ * The types of async values bindable to the NGSubscribe directive.
  */
 export type AsyncInput<T> = PromiseLike<T> | Subscribable<T>;
 

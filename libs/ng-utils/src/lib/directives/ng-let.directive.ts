@@ -13,7 +13,13 @@ import {
  * The object available in the the *ngLet directive's template.
  */
 export class NgLetContext<T> {
+  /**
+   * The implicitly bindable property of the context object.
+   */
   public $implicit?: T;
+  /**
+   * The name-sake property of the context object.
+   */
   public ngLet?: T;
 }
 

@@ -1,6 +1,9 @@
 import { Injector, InjectFlags, ProviderToken } from '@angular/core';
 import { MixinDependencyResolverModule } from '../mixin-dependency-resolver.module';
 
+/**
+ * @internal
+ */
 interface IMixinDependencyResolverConfig {
   injector?: Injector;
   notFoundValue?: any;

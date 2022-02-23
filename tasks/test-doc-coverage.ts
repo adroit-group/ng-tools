@@ -1,5 +1,5 @@
 import * as child_process from 'child_process';
-import * as colors from 'colors';
+// import * as colors from 'colors';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -10,18 +10,18 @@ const command =
 
 function testDocCoverage() {
   try {
-    console.log(colors.cyan(`Testing documentation coverage.`));
+    console.log(`Testing documentation coverage.`);
     let prevCoverage = 0;
     const docCoverageExists = fs.existsSync(documentationCoverageFile);
     if (!docCoverageExists) {
       console.log(
-        colors.cyan(`
+        `
           It seems like this is either the first the the documentation coverage test is ran or the previous results were erased.\n
           The test script will generate ${path.join(
             __dirname,
             documentationCoverageFile
           )} with documentation coverage data.
-        `)
+        `
       );
     }
 
@@ -51,34 +51,34 @@ function testDocCoverage() {
 
     if (newCoverage < prevCoverage) {
       console.error(
-        colors.red(`
+        `
           Documentation coverage test failed!\n
           New coverage ${newCoverage}% is less than the previous ${prevCoverage}%.\n
           Did you forget to document the new code that your are trying to commit?
-        `)
+        `
       );
 
       throw new Error();
     }
 
     console.log(
-      colors.green(`
+     `
         Documentation coverage test passed with: ${newCoverage}% overall coverage.\n
         Previous coverage was: ${prevCoverage}%.
-      `)
+      `
     );
 
     if (newCoverage === prevCoverage) {
       console.log(
-        colors.cyan(
+
           `Documentation coverage did not change since last test. Skipping project data update.`
-        )
+
       );
       return;
     }
 
     console.log(
-      colors.cyan(`Updating project files with the new coverage data.`)
+      `Updating project files with the new coverage data.`
     );
 
     fs.writeFileSync(
@@ -93,7 +93,7 @@ function testDocCoverage() {
       { encoding: 'utf8' }
     );
 
-    console.log(colors.green(`Project data updated with new coverage.`));
+    console.log(`Project data updated with new coverage.`);
   } catch (error) {
     console.error(error);
 

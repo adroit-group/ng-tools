@@ -1,3 +1,6 @@
+/**
+ * @internal
+ */
 export type ReturnTypeUnsafe<T> = T extends new (...args: any) => infer R
   ? R
   : T;

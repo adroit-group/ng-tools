@@ -20,9 +20,10 @@ import { ModuleLoadError } from './module-load-error';
  * ```
  */
 export abstract class ASingletonModule {
-  protected abstract self: ASingletonModule;
-
-  constructor(self: ASingletonModule) {
+  /**
+   * @param self The same module class instance received from the DI system.
+   */
+  constructor(self?: ASingletonModule) {
     if (self) {
       // eslint-disable-next-line @typescript-eslint/ban-types
       throw new ModuleLoadError((self as unknown as Function).name);
