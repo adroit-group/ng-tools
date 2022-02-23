@@ -1,7 +1,6 @@
 {
-  "extends": "./tsconfig.lib.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "types": ["jest", "node"]
