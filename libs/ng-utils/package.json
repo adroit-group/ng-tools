@@ -1,5 +1,5 @@
 {
-  "name": "@adroit/ng-utils",
+  "name": "@adroit-group/ng-utils",
   "version": "0.1.0",
   "peerDependencies": {
     "@angular/common": "^12.1.0-",

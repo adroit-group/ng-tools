@@ -1,4 +1,4 @@
-import { AdroitNgUtilsModule } from '@adroit/ng-utils';
+import { AdroitNgUtilsModule } from '@adroit-group/ng-utils';
 import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';

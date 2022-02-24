@@ -3,7 +3,7 @@ import {
   MediaObserverMixin,
   SubscriptionHandlerMixin,
   TrackByHandlerMixin,
-} from '@adroit/ng-utils';
+} from '@adroit-group/ng-utils';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

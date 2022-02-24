@@ -44,7 +44,7 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
 
 ## Installation
 
-Run `npm install @adroit/ng-utils --save` to install the library.
+Run `npm install @adroit-group/ng-utils --save` to install the library.
 
 ## Usage
 
@@ -146,7 +146,7 @@ import {
   RunIn,
   RunInBrowser,
   RunInServer
-} from '@adroit/ng-utils';
+} from '@adroit-group/ng-utils';
 
 @Component({
   selector: 'app-root',
