@@ -1,5 +1,4 @@
-import { Injector, NgModule, Optional, SkipSelf } from '@angular/core';
-import { ASingletonModule } from './classes';
+import { Injector, NgModule } from '@angular/core';
 
 const injectorSym = Symbol('__MixinDependencyResolverModule:InjectorSym__');
 
@@ -11,18 +10,14 @@ const injectorSym = Symbol('__MixinDependencyResolverModule:InjectorSym__');
  * is the global injector and thus has no notion of the context and template specific dependencies.
  */
 @NgModule({})
-export class MixinDependencyResolverModule extends ASingletonModule {
+export class MixinDependencyResolverModule {
   public static get injector(): Injector {
     return MixinDependencyResolverModule[injectorSym];
   }
 
   private static [injectorSym]: Injector;
 
-  constructor(
-    @Optional() @SkipSelf() self: MixinDependencyResolverModule,
-    injector: Injector
-  ) {
-    super(self);
+  constructor(injector: Injector) {
     MixinDependencyResolverModule[injectorSym] = injector;
   }
 }
