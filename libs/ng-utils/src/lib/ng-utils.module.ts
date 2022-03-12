@@ -1,4 +1,4 @@
-import { PlatformObserver } from './services/platform-observer.service';
+import { PlatformObserverService } from './services/platform-observer.service';
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { LIB_DIRECTIVES } from './directives';
@@ -18,7 +18,7 @@ import { LayoutModule } from '@angular/cdk/layout';
   exports: [...LIB_DIRECTIVES, ...LIB_PIPES, FlexLayoutModule, LayoutModule],
 })
 export class AdroitNgUtilsModule {
-  public static platformObserver: PlatformObserver;
+  public static platformObserver: PlatformObserverService;
 
   public static forRoot(): ModuleWithProviders<AdroitNgUtilsModule> {
     return {
@@ -27,7 +27,7 @@ export class AdroitNgUtilsModule {
     };
   }
 
-  constructor(platformObserver: PlatformObserver) {
+  constructor(platformObserver: PlatformObserverService) {
     AdroitNgUtilsModule.platformObserver = platformObserver;
   }
 }

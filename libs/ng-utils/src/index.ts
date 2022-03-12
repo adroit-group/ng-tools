@@ -40,6 +40,10 @@ export {
  */
 export { MethodInvokerPipe } from './lib/pipes';
 /**
+ * ? Services
+ */
+export { PlatformObserverService } from './lib/services';
+/**
  * ? Tokens
  */
 export { METHOD_INVOKER_PIPE_HOST } from './lib/tokens';
