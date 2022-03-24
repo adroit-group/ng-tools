@@ -34,6 +34,7 @@
     "----------------------------------------  NG UTILS LIB  ------------------------------------------": "",
     "prebuild:lib": "rimraf dist/libs/ng-utils",
     "build:lib": "ng build ng-utils --verbose --c=production",
+    "postbuild:lib": "npx ts-node tasks/correct-mixin-types.ts",
     "install:lib:local": "npm i ./dist/libs/ng-utils",
     "version-lib": "cd libs/ng-utils && npm version --no-git-tag-version",
     "postversion-lib": "cd ..\\..\\",

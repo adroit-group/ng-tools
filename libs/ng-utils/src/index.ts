@@ -17,6 +17,7 @@ export {
   NgRenderInDirective,
   NgRenderInBrowserDirective,
   NgRenderInServerDirective,
+  TypedNgTemplateDirective
 } from './lib/directives';
 /**
  * ? Interfaces

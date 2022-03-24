@@ -1,9 +1,4 @@
-import {
-  AutoHooks,
-  MediaObserverMixin,
-  SubscriptionHandlerMixin,
-  TrackByHandlerMixin,
-} from '@adroit-group/ng-utils';
+import { AutoHooks, MediaObserverMixin, SubscriptionHandlerMixin, TrackByHandlerMixin } from '@adroit-group/ng-utils';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
