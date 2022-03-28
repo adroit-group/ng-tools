@@ -17,6 +17,7 @@ export {
   NgRenderInDirective,
   NgRenderInBrowserDirective,
   NgRenderInServerDirective,
+  TypedNgTemplateDirective
 } from './lib/directives';
 /**
  * ? Interfaces
@@ -39,6 +40,10 @@ export {
  * ? Pipes
  */
 export { MethodInvokerPipe } from './lib/pipes';
+/**
+ * ? Services
+ */
+export { PlatformObserverService } from './lib/services';
 /**
  * ? Tokens
  */

@@ -4,6 +4,7 @@ import {
   isPlatformWorkerUi,
 } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { WINDOW } from '../tokens/window-ref.token';
 
 /**
  * An Injectable service that helps to identify the platform where the application runs.
@@ -11,7 +12,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class PlatformObserver {
+export class PlatformObserverService {
   /**
    * Gets whether the app is running in the browser
    */
@@ -36,5 +37,8 @@ export class PlatformObserver {
   /**
    * @param platformID The platform id of the platform where the application is running
    */
-  constructor(@Inject(PLATFORM_ID) public readonly platformID: string) {}
+  constructor(
+    @Inject(PLATFORM_ID) public readonly platformID: string,
+    @Inject(WINDOW) public readonly window: Window
+  ) {}
 }
