@@ -1,22 +1,19 @@
+import { BindQueryParamDirective } from './bind-query-param.directive';
 import { NgForAugmentationDirective } from './ng-for-augmentation.directive';
 import { NgIfAugmentedDirective } from './ng-if-augmentation.directive';
 import { NgLetDirective } from './ng-let.directive';
-import { NgSubscribeDirective } from './ng-subscribe.directive';
 import {
-  NgRenderInDirective,
-  NgRenderInBrowserDirective,
-  NgRenderInServerDirective,
+  NgRenderInBrowserDirective, NgRenderInDirective, NgRenderInServerDirective
 } from './ng-render-in.directive';
+import { NgSubscribeDirective } from './ng-subscribe.directive';
 
 export { NgForAugmentationDirective } from './ng-for-augmentation.directive';
 export { NgIfAugmentedDirective } from './ng-if-augmentation.directive';
 export { NgLetDirective } from './ng-let.directive';
-export { NgSubscribeDirective } from './ng-subscribe.directive';
 export {
-  NgRenderInDirective,
-  NgRenderInBrowserDirective,
-  NgRenderInServerDirective,
+  NgRenderInBrowserDirective, NgRenderInDirective, NgRenderInServerDirective
 } from './ng-render-in.directive';
+export { NgSubscribeDirective } from './ng-subscribe.directive';
 
 /**
  * @internal
@@ -29,4 +26,5 @@ export const LIB_DIRECTIVES = [
   NgRenderInDirective,
   NgRenderInBrowserDirective,
   NgRenderInServerDirective,
+  BindQueryParamDirective
 ];
