@@ -10,7 +10,7 @@ export class TypedNgTemplateDirective<TypeToken> {
     public typeToken!: TypeToken;
 
     // the directive gets the template from Angular
-    constructor(public readonly contentTemplate: TemplateRef<TypeToken>) {}
+    constructor(private readonly contentTemplate: TemplateRef<TypeToken>) {}
 
     // this magic is how we tell Angular the context type for this directive, which then propagates down to the type of the template
     static ngTemplateContextGuard<TypeToken>(

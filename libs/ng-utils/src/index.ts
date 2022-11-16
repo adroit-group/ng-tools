@@ -11,13 +11,14 @@ export { AutoHooks } from './lib/decorators';
  */
 export {
   NgForAugmentationDirective,
+  NgForTrackIdDirective,
   NgIfAugmentedDirective,
   NgLetDirective,
   NgSubscribeDirective,
   NgRenderInDirective,
   NgRenderInBrowserDirective,
   NgRenderInServerDirective,
-  TypedNgTemplateDirective
+  TypedNgTemplateDirective,
 } from './lib/directives';
 /**
  * ? Interfaces
