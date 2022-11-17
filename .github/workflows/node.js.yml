@@ -25,20 +25,13 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: Install dependencies
-      run: |
-          if [ -e yarn.lock ]; then
-          yarn install --frozen-lockfile
-          elif [ -e package-lock.json ]; then
-          npm ci
-          else
-          npm i
-          fi
+      run: npm i
     - run: npm run build:lib --if-present
-    
-  lint: 
+
+  lint:
 
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
@@ -61,11 +54,11 @@ jobs:
           npm i
           fi
     - run: npm run lint:lib
-    
-  test: 
+
+  test:
 
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
