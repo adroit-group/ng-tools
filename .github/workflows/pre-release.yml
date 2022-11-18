@@ -32,6 +32,8 @@ jobs:
           files: |
             LICENSE.txt
             *.d.ts
+            *.mjs
+            *.map
             *.js
             package.json
         id: 'automatic_releases'
