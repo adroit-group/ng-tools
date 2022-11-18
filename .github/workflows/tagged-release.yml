@@ -1,0 +1,34 @@
+---
+name: 'pre-release'
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  tagged-release:
+    name: 'Tagged Release'
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: 'Checkout source code'
+        uses: 'actions/checkout@v2.3.4'
+      - uses: 'actions/cache@v2.1.6'
+        with:
+          node-version: 16
+      - run: npm install --legacy-peer-deps
+      - run: npm lint:lib
+      - run: npm test:lib
+      - run: npm build:lib
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: '${{ secrets.GITHUB_TOKEN }}'
+          prerelease: false
+          files: |
+            LICENSE.txt
+            *.d.ts
+            *.js
+            package.json
+        id: 'automatic_releases'
