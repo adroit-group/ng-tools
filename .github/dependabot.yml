@@ -9,6 +9,13 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    # Prefix all commit messages with "npm"
     commit-message:
-      # Prefix all commit messages with "npm"
       prefix: "npm"
+    # Specify labels for npm pull requests
+    labels:
+      - "dependencies"
+    assignees:
+      - "JohnasBroda"
+    reviewers:
+      - "@Adroit-Group/front-end"
