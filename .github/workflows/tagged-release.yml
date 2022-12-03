@@ -13,11 +13,13 @@ jobs:
 
     steps:
       - name: 'Checkout source code'
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+        uses: actions/checkout@v3
+      - name: 'Setup Node'
+        uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm install --legacy-peer-deps
+      - name: 'Install dependencies'
+        run: npm install --legacy-peer-deps
       - run: npm lint:lib
       - run: npm test:lib
       - run: npm build:lib
@@ -33,4 +35,4 @@ jobs:
             *.map
             *.js
             package.json
-        id: 'automatic_releases'
+          id: 'automatic_releases'
