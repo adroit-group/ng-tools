@@ -20,9 +20,9 @@ jobs:
           node-version: 16
       - name: 'Install dependencies'
         run: npm install --legacy-peer-deps
-      - run: npm lint:lib
-      - run: npm test:lib
-      - run: npm build:lib
+      - run: npm run lint:lib
+      - run: npm run test:lib
+      - run: npm run build:lib
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
