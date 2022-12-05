@@ -31,11 +31,4 @@ jobs:
           automatic_release_tag: 'latest'
           prerelease: true
           title: 'Development Build'
-          files: |
-            LICENSE.txt
-            *.d.ts
-            *.mjs
-            *.map
-            *.js
-            package.json
           id: 'automatic_releases'

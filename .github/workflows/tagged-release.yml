@@ -28,11 +28,4 @@ jobs:
         with:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
           prerelease: false
-          files: |
-            LICENSE.txt
-            *.d.ts
-            *.mjs
-            *.map
-            *.js
-            package.json
           id: 'automatic_releases'
