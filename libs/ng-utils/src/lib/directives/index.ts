@@ -1,3 +1,4 @@
+import { FormControlAugmentationDirective } from './formcontrol-augmentation.directive';
 import { NgForAugmentationDirective } from './ng-for-augmentation.directive';
 import { NgForTrackIdDirective } from './ng-for-track-id.directive';
 import { NgIfAugmentedDirective } from './ng-if-augmentation.directive';
@@ -26,6 +27,7 @@ export { TypedNgTemplateDirective } from './typed-ng-template.directive';
  * @internal
  */
 export const LIB_DIRECTIVES = [
+  FormControlAugmentationDirective,
   NgLetDirective,
   NgSubscribeDirective,
   NgForAugmentationDirective,
