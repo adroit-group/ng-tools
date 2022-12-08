@@ -11,6 +11,7 @@ import {
 import { NgSubscribeDirective } from './ng-subscribe.directive';
 import { TypedNgTemplateDirective } from './typed-ng-template.directive';
 
+export { FormControlAugmentationDirective } from './formcontrol-augmentation.directive';
 export { NgForAugmentationDirective } from './ng-for-augmentation.directive';
 export { NgForTrackIdDirective } from './ng-for-track-id.directive';
 export { NgIfAugmentedDirective } from './ng-if-augmentation.directive';
