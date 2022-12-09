@@ -177,6 +177,48 @@
         }
       },
       "tags": []
+    },
+    "ngx-di-unchained": {
+      "projectType": "library",
+      "root": "libs/ngx-di-unchained",
+      "sourceRoot": "libs/ngx-di-unchained/src",
+      "prefix": "ad",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "outputs": ["dist/libs/ngx-di-unchained"],
+          "options": {
+            "project": "libs/ngx-di-unchained/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/ngx-di-unchained/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/ngx-di-unchained/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ngx-di-unchained"],
+          "options": {
+            "jestConfig": "libs/ngx-di-unchained/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/ngx-di-unchained/src/**/*.ts",
+              "libs/ngx-di-unchained/src/**/*.html"
+            ]
+          }
+        }
+      },
+      "tags": []
     }
   }
 }
