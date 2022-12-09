@@ -168,9 +168,50 @@
           "options": {
             "lintFilePatterns": [
               "libs/ng-utils/src/**/*.ts",
-              "libs/ng-utils/src/**/*.html",
-              "libs/ng-utils/ngx-cdps-meter/**/*.ts",
-              "libs/ng-utils/ngx-cdps-meter/**/*.html"
+              "libs/ng-utils/src/**/*.html"
+            ]
+          },
+          "outputs": ["{options.outputFile}"]
+        }
+      },
+      "tags": []
+    },
+    "ngx-cdps-meter": {
+      "projectType": "library",
+      "root": "libs/ngx-cdps-meter",
+      "sourceRoot": "libs/ngx-cdps-meter/src",
+      "prefix": "ad",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "outputs": ["dist/libs/ngx-cdps-meter"],
+          "options": {
+            "project": "libs/ngx-cdps-meter/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/ngx-cdps-meter/tsconfig.lib.json"
+            },
+            "development": {
+              "tsConfig": "libs/ngx-cdps-meter/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ngx-cdps-meter"],
+          "options": {
+            "jestConfig": "libs/ngx-cdps-meter/jest.config.js",
+            "passWithNoTests": false
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/ngx-cdps-meter/**/*.ts",
+              "libs/ngx-cdps-meter/**/*.html"
             ]
           },
           "outputs": ["{options.outputFile}"]

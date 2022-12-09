@@ -25,9 +25,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@adroit-group/ng-utils/ngx-cdps-meter": [
-        "libs/ng-utils/ngx-cdps-meter/src/index.ts"
-      ],
+      "~adroit-group/ngx-cdps-meter": ["libs/ngx-cdps-meter/src/public-api.ts"],
       "~adroit-group/ng-utils": ["libs/ng-utils/src/public-api.ts"]
     }
   },
