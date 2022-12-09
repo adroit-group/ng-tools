@@ -1,0 +1,34 @@
+---
+name: 'pre-release'
+
+on:
+  push:
+    branches:
+      - 'main'
+    tags-ignore:
+      - '*'
+
+jobs:
+  pre_release:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: 'Checkout source code'
+        uses: actions/checkout@v3
+      - name: 'Setup Node'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: 'Install dependencies'
+        run: npm install --legacy-peer-deps
+      - run: npm run lint:lib
+      - run: npm run test:lib
+      - run: npm run build:lib
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: '${{ secrets.GITHUB_TOKEN }}'
+          automatic_release_tag: 'latest'
+          prerelease: true
+          title: 'Development Build'
+          id: 'automatic_releases'
