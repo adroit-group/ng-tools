@@ -1,36 +1,46 @@
 import { CommonModule } from '@angular/common';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator';
+import { createComponentFactory } from '@ngneat/spectator';
+import { randomUUID } from 'crypto';
 
 import { FormControlAugmentationDirective } from './formcontrol-augmentation.directive';
 
 describe('Directive: FormControlAugmentation', () => {
-  let spectator: SpectatorDirective<FormControlAugmentationDirective>;
-  let directive: FormControlAugmentationDirective;
+  const controlValue = randomUUID();
 
-  const createDirective = createDirectiveFactory({
-    directive: FormControlAugmentationDirective,
+  @Component({
+    viewProviders: [FormControlAugmentationDirective],
+    template: `<input
+      [formControl]="testControl"
+      #templateVariableName="formControl"
+    />`,
+  })
+  class TestComponent {
+    @ViewChild('templateVariableName')
+    exportedFormControl!: FormControlAugmentationDirective;
+    testControl = new FormControl(controlValue);
+  }
+
+  let spectator;
+  let component: TestComponent;
+
+  const createComponent = createComponentFactory({
+    component: TestComponent,
+    declarations: [FormControlAugmentationDirective],
     imports: [CommonModule, ReactiveFormsModule],
   });
 
   beforeEach(() => {
-    const testControl = new FormControl(null);
-
-    spectator = createDirective(
-      `
-        <input [formControl]="control" #templateVariableName="formControl"/>
-    `,
-      {
-        hostProps: {
-          control: testControl,
-        },
-      }
-    );
-
-    directive = spectator.directive;
+    spectator = createComponent();
+    component = spectator.component;
   });
 
   it('should create', () => {
-    expect(directive).toBeDefined();
+    expect(component).toBeDefined();
+  });
+
+  it('should hold the corresponding value', () => {
+    expect(component.exportedFormControl.host.value).toEqual(controlValue);
   });
 });
