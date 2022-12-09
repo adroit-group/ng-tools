@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "ng-util-demo": {
+      "$schema": "..\\..\\node_modules\\nx\\schemas\\project-schema.json",
       "projectType": "application",
       "root": "apps/ng-util-demo",
       "sourceRoot": "apps/ng-util-demo/src",
@@ -97,7 +98,7 @@
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/apps/ng-util-demo"],
           "options": {
-            "jestConfig": "apps/ng-util-demo/jest.config.js",
+            "jestConfig": "apps/ng-util-demo/jest.config.ts",
             "passWithNoTests": true
           }
         }
@@ -105,6 +106,7 @@
       "tags": []
     },
     "ng-util-demo-e2e": {
+      "$schema": "..\\..\\node_modules\\nx\\schemas\\project-schema.json",
       "root": "apps/ng-util-demo-e2e",
       "sourceRoot": "apps/ng-util-demo-e2e/src",
       "projectType": "application",
@@ -134,6 +136,7 @@
       "implicitDependencies": ["ng-util-demo"]
     },
     "ng-utils": {
+      "$schema": "..\\..\\node_modules\\nx\\schemas\\project-schema.json",
       "projectType": "library",
       "root": "libs/ng-utils",
       "sourceRoot": "libs/ng-utils/src",
@@ -159,7 +162,7 @@
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/ng-utils"],
           "options": {
-            "jestConfig": "libs/ng-utils/jest.config.js",
+            "jestConfig": "libs/ng-utils/jest.config.ts",
             "passWithNoTests": false
           }
         },

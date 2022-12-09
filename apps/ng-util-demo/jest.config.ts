@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'ng-utils',
+/* eslint-disable */
+export default {
+  displayName: 'ng-util-demo',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,8 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/libs/ng-utils',
-  coverageReporters: ['clover', 'json', 'lcov', 'text', 'text-summary'],
+  coverageDirectory: '../../coverage/apps/ng-util-demo',
   transform: {
     '^.+.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

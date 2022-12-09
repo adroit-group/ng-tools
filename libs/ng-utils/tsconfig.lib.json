@@ -4,11 +4,16 @@
     "outDir": "../../dist/out-tsc",
     "declaration": true,
     "declarationMap": true,
-    "inlineSources": true,
+    "inlineSources": true
   },
   "angularCompilerOptions": {
     "compilationMode": "partial"
   },
-  "exclude": ["src/test-setup.ts", "**/*.spec.ts", "**/*.test.ts"],
+  "exclude": [
+    "src/test-setup.ts",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "jest.config.ts"
+  ],
   "include": ["**/*.ts"]
 }

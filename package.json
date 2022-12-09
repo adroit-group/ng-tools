@@ -10,7 +10,7 @@
   },
   "scripts": {
     "ng": "nx",
-    "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
+    "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2020 browser module main",
     "nx": "nx",
     "start": "ng serve",
     "analyze-bundles": "webpack-bundle-analyzer dist/apps/ng-util-demo/stats.json",
@@ -88,7 +88,7 @@
     "@angular-eslint/eslint-plugin": "13.2.1",
     "@angular-eslint/eslint-plugin-template": "13.2.1",
     "@angular-eslint/template-parser": "13.2.1",
-    "@angular/cli": "13.3.10",
+    "@angular/cli": "~14.0.0",
     "@angular/compiler-cli": "14.0.7",
     "@angular/language-service": "14.0.7",
     "@ngneat/spectator": "^10.0.0",
@@ -98,7 +98,6 @@
     "@nrwl/jest": "14.2.0",
     "@nrwl/linter": "14.2.0",
     "@nrwl/nx-cloud": "15.0.2",
-    "@nrwl/tao": "14.2.0",
     "@nrwl/workspace": "14.2.0",
     "@types/jest": "27.4.1",
     "@types/node": "^18.11.10",
@@ -140,7 +139,7 @@
     "webpack": "^5.51.1",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.8.0",
-    "yargs": "^16.2.0"
+    "yargs": "^16.2.0",
+    "nx": "14.2.0"
   }
 }
-
