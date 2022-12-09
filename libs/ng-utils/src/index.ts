@@ -10,24 +10,21 @@ export { AutoHooks } from './lib/decorators';
  * ? Directives
  */
 export {
+  FormControlNameAugmentationDirective,
   NgForAugmentationDirective,
   NgForTrackIdDirective,
   NgIfAugmentedDirective,
   NgLetDirective,
-  NgSubscribeDirective,
-  NgRenderInDirective,
   NgRenderInBrowserDirective,
+  NgRenderInDirective,
   NgRenderInServerDirective,
+  NgSubscribeDirective,
   TypedNgTemplateDirective,
 } from './lib/directives';
 /**
  * ? Interfaces
  */
 export { Constructor } from './lib/interfaces';
-/**
- * ? Modules
- */
-export { AdroitNgUtilsModule } from './lib/ng-utils.module';
 export { MixinDependencyResolverModule } from './lib/mixin-dependency-resolver.module';
 /**
  * ? Mixins
@@ -37,6 +34,10 @@ export {
   SubscriptionHandlerMixin,
   TrackByHandlerMixin,
 } from './lib/mixins';
+/**
+ * ? Modules
+ */
+export { AdroitNgUtilsModule } from './lib/ng-utils.module';
 /**
  * ? Pipes
  */
