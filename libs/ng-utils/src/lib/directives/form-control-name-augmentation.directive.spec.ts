@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { createComponentFactory } from '@ngneat/spectator';
 import { randomUUID } from 'crypto';
 
@@ -24,7 +29,7 @@ describe('Directive: FormControlNameAugmentation', () => {
     @ViewChild('templateVariableName')
     exportedFormControl!: FormControlNameAugmentationDirective;
     form = new FormGroup({
-      testControl: new FormControl(controlValue),
+      testControl: new FormControl(controlValue, [Validators.maxLength(1)]),
     });
   }
 
@@ -48,5 +53,6 @@ describe('Directive: FormControlNameAugmentation', () => {
 
   it('should hold the corresponding value', () => {
     expect(component.exportedFormControl.value).toEqual(controlValue);
+    expect(component.exportedFormControl.invalid).toEqual(true);
   });
 });
