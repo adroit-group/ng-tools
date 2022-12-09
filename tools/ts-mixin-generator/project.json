@@ -11,5 +11,6 @@
         "passWithNoTests": true
       }
     }
-  }
+  },
+  "name": "tools-ts-mixin-generator"
 }

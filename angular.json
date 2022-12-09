@@ -10,9 +10,7 @@
       "targets": {
         "build": {
           "executor": "@angular-devkit/build-angular:browser",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/ng-util-demo",
             "index": "apps/ng-util-demo/src/index.html",
@@ -24,9 +22,7 @@
               "apps/ng-util-demo/src/favicon.ico",
               "apps/ng-util-demo/src/assets"
             ],
-            "styles": [
-              "apps/ng-util-demo/src/styles.scss"
-            ]
+            "styles": ["apps/ng-util-demo/src/styles.scss"]
           },
           "configurations": {
             "production": {
@@ -96,15 +92,11 @@
               "apps/ng-util-demo/src/**/*.html"
             ]
           },
-          "outputs": [
-            "{options.outputFile}"
-          ]
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/ng-util-demo"
-          ],
+          "outputs": ["{workspaceRoot}/coverage/apps/ng-util-demo"],
           "options": {
             "jestConfig": "apps/ng-util-demo/jest.config.ts",
             "passWithNoTests": true
@@ -135,19 +127,13 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/ng-util-demo-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/ng-util-demo-e2e/**/*.{js,ts}"]
           },
-          "outputs": [
-            "{options.outputFile}"
-          ]
+          "outputs": ["{options.outputFile}"]
         }
       },
       "tags": [],
-      "implicitDependencies": [
-        "ng-util-demo"
-      ]
+      "implicitDependencies": ["ng-util-demo"]
     },
     "ng-utils": {
       "$schema": "..\\..\\node_modules\\nx\\schemas\\project-schema.json",
@@ -158,9 +144,7 @@
       "targets": {
         "build": {
           "executor": "@nrwl/angular:package",
-          "outputs": [
-            "dist/libs/ng-utils"
-          ],
+          "outputs": ["{workspaceRoot}/dist/libs/ng-utils"],
           "options": {
             "project": "libs/ng-utils/ng-package.json"
           },
@@ -176,9 +160,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/ng-utils"
-          ],
+          "outputs": ["{workspaceRoot}/coverage/libs/ng-utils"],
           "options": {
             "jestConfig": "libs/ng-utils/jest.config.ts",
             "passWithNoTests": false
@@ -194,9 +176,7 @@
               "libs/ng-utils/ngx-cdps-meter/**/*.html"
             ]
           },
-          "outputs": [
-            "{options.outputFile}"
-          ]
+          "outputs": ["{options.outputFile}"]
         }
       },
       "tags": []
