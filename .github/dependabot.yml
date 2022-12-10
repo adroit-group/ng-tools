@@ -13,6 +13,7 @@ updates:
     commit-message:
       prefix: "npm"
     # Specify labels for npm pull requests
+    target-branch: "develop"
     labels:
       - "dependencies"
     assignees:
