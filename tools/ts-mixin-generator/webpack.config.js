@@ -25,7 +25,6 @@ module.exports = {
   mode: 'development',
   plugins: [
     new CleanWebpackPlugin(),
-    new UglifyJSPlugin(),
     // new DeclarationBundlerPlugin({
     //   moduleName: '"mylib"',
     //   out: '@types/index.d.ts',
