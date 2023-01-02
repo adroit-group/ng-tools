@@ -41,7 +41,7 @@ export { AdroitNgUtilsModule } from './lib/ng-utils.module';
 /**
  * ? Pipes
  */
-export { MethodInvokerPipe } from './lib/pipes';
+export { MethodInvokerPipe, SafePipe } from './lib/pipes';
 /**
  * ? Services
  */
