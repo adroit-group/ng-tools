@@ -95,7 +95,7 @@ export class NgRenderInBrowserDirective extends NgRenderInDirective {
  * <!-- With alternative template -->
  * <app-splash-screen *ngRenderInServer="or browserTpl"></app-splash-screen>
  *
- * <ng-template #ssrTpl>...</ng-template>
+ * <ng-template #browserTpl>...</ng-template>
  * ```
  */
 @Directive({
