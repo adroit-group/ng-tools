@@ -54,7 +54,6 @@
     "test:lib:doc:coverage": "npx ts-node tasks/test-doc-coverage.ts"
   },
   "dependencies": {
-    "@adroit-group/ng-utils": "file:dist/libs/ng-utils",
     "@angular/animations": "^13.1.3",
     "@angular/cdk": "^13.1.3",
     "@angular/common": "^13.1.3",
