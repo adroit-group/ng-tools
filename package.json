@@ -76,6 +76,7 @@
     "@nrwl/angular": "^13.5.3",
     "colors": "^1.4.0",
     "graph-data-structure": "^2.0.0",
+    "jest-marbles": "^3.0.3",
     "js-combinatorics": "^1.5.4",
     "piscina": "^3.2.0",
     "rxjs": "~6.6.0",
