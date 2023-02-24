@@ -3,6 +3,10 @@
  */
 export { ASingletonModule, ModuleLoadError } from './lib/classes';
 /**
+ * ? Directives
+ */
+export { EApplicationPlatform } from './lib/constants';
+/**
  * ? Decorators
  */
 export { AutoHooks } from './lib/decorators';

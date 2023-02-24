@@ -63,11 +63,16 @@
   </div>
   <p>Here are some links to help you get started.</p>
   <ul class="resources">
-    <li class="col-span-2">
+    <li class="col-span-2" *ngRenderInBrowser="or ssrTpl">
       <a class="resource flex" href="https://nxplaybook.com/p/nx-workspaces">
         Nx video course
       </a>
     </li>
+
+    <ng-template #ssrTpl>
+      ssr
+    </ng-template>
+
     <li class="col-span-2">
       <a
         class="resource flex"

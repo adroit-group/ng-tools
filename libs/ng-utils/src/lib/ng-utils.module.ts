@@ -1,21 +1,15 @@
-import { PlatformObserverService } from './services/platform-observer.service';
+import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { LIB_DIRECTIVES } from './directives';
-import { LIB_PIPES } from './pipes';
 import { MixinDependencyResolverModule } from './mixin-dependency-resolver.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { LayoutModule } from '@angular/cdk/layout';
+import { LIB_PIPES } from './pipes';
+import { PlatformObserverService } from './services/platform-observer.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MixinDependencyResolverModule,
-    FlexLayoutModule,
-    LayoutModule,
-  ],
+  imports: [CommonModule, MixinDependencyResolverModule, LayoutModule],
   declarations: [...LIB_DIRECTIVES, ...LIB_PIPES],
-  exports: [...LIB_DIRECTIVES, ...LIB_PIPES, FlexLayoutModule, LayoutModule],
+  exports: [...LIB_DIRECTIVES, ...LIB_PIPES, LayoutModule],
 })
 export class AdroitNgUtilsModule {
   public static platformObserver: PlatformObserverService;
