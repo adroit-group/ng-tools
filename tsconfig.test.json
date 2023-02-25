@@ -19,6 +19,5 @@
       "tslib": ["node_modules/tslib/tslib.d.ts"]
     }
   },
-  "include": ["./tools/ts-mixin-generator/test/sources/**/*.ts"],
   "exclude": ["node_modules/*"]
 }

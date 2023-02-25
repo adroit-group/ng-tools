@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { EApplicationPlatform } from '../enums';
+import { EApplicationPlatform } from '../constants';
 import { AdroitNgUtilsModule } from '../ng-utils.module';
 
 /**
@@ -18,7 +18,7 @@ import { AdroitNgUtilsModule } from '../ng-utils.module';
  * ```
  */
 export function RunOnServer(): MethodDecorator {
-  return RunOnPlatform(EApplicationPlatform.Server);
+  return RunOnPlatform(EApplicationPlatform.server);
 }
 
 /**
@@ -37,15 +37,15 @@ export function RunOnServer(): MethodDecorator {
  * ```
  */
 export function RunInBrowser(): MethodDecorator {
-  return RunOnPlatform(EApplicationPlatform.Browser);
+  return RunOnPlatform(EApplicationPlatform.browser);
 }
 
 export function RunInWorkerApp(): MethodDecorator {
-  return RunOnPlatform(EApplicationPlatform.WorkerApp);
+  return RunOnPlatform(EApplicationPlatform.browserWorkerApp);
 }
 
 export function RunInWorkerUI(): MethodDecorator {
-  return RunOnPlatform(EApplicationPlatform.WorkerUI);
+  return RunOnPlatform(EApplicationPlatform.browserWorkerUi);
 }
 
 /**
@@ -76,9 +76,8 @@ export function RunInWorkerUI(): MethodDecorator {
  */
 export function RunOnPlatform(
   platforms:
-    | EApplicationPlatform
-    | string
-    | [EApplicationPlatform | string, ...(EApplicationPlatform | string)[]]
+    | keyof typeof EApplicationPlatform
+    | [keyof typeof EApplicationPlatform | string[]]
 ): MethodDecorator {
   return (
     _target: Record<any, any>,
@@ -102,7 +101,8 @@ export function RunOnPlatform(
     descriptor[appliedOn] = ((...args: any[]): void => {
       if (
         allowedPlatforms.includes(
-          AdroitNgUtilsModule.platformObserver.platformID
+          AdroitNgUtilsModule.platformObserver
+            .platformID as keyof typeof EApplicationPlatform
         )
       ) {
         descriptor[appliedOn](...args);

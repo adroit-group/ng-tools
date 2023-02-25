@@ -3,6 +3,10 @@
  */
 export { ASingletonModule, ModuleLoadError } from './lib/classes';
 /**
+ * ? Directives
+ */
+export { EApplicationPlatform } from './lib/constants';
+/**
  * ? Decorators
  */
 export { AutoHooks } from './lib/decorators';
@@ -10,24 +14,21 @@ export { AutoHooks } from './lib/decorators';
  * ? Directives
  */
 export {
+  FormControlNameAugmentationDirective,
   NgForAugmentationDirective,
   NgForTrackIdDirective,
   NgIfAugmentedDirective,
   NgLetDirective,
-  NgSubscribeDirective,
-  NgRenderInDirective,
   NgRenderInBrowserDirective,
+  NgRenderInDirective,
   NgRenderInServerDirective,
+  NgSubscribeDirective,
   TypedNgTemplateDirective,
 } from './lib/directives';
 /**
  * ? Interfaces
  */
 export { Constructor } from './lib/interfaces';
-/**
- * ? Modules
- */
-export { AdroitNgUtilsModule } from './lib/ng-utils.module';
 export { MixinDependencyResolverModule } from './lib/mixin-dependency-resolver.module';
 /**
  * ? Mixins
@@ -38,9 +39,13 @@ export {
   TrackByHandlerMixin,
 } from './lib/mixins';
 /**
+ * ? Modules
+ */
+export { AdroitNgUtilsModule } from './lib/ng-utils.module';
+/**
  * ? Pipes
  */
-export { MethodInvokerPipe } from './lib/pipes';
+export { MethodInvokerPipe, SafePipe } from './lib/pipes';
 /**
  * ? Services
  */

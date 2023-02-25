@@ -32,6 +32,7 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
     - [NgRenderIn Directive](#ngrenderin-directive)
       - [NgRenderInBrowser Directive](#ngrenderinbrowser-directive)
       - [NgRenderInServer Directive](#ngrenderinserver-directive)
+    - [FormControlName Augmentation Directive](#formcontrolname-augmentation-directive)
   - [Services](#services)
     - [Platform Observer](#platform-observer)
   - [Pipes](#pipes)
@@ -338,12 +339,22 @@ A structural directive that only renders it's template if the application is ran
 
 [⬆ Back to top](#table-of-contents)
 
+### FormControlName Augmentation Directive
+
+A utility directive that exposes the `FormControlName` with `exportAs` so it can be stored in a template variable.
+
+```html
+<input formControlName="testControl" #templateVariableName="formControlName" />
+<span *ngIf="templateVariableName.invalid">Error message</span>
+```
+
+[⬆ Back to top](#table-of-contents)
+
 ## Services
 
 ### Platform Observer
 
 An Injectable service that helps to identify the platform where the application runs.
-
 
 ## Pipes
 

@@ -1,3 +1,4 @@
+import { FormControlNameAugmentationDirective } from './form-control-name-augmentation.directive';
 import { NgForAugmentationDirective } from './ng-for-augmentation.directive';
 import { NgForTrackIdDirective } from './ng-for-track-id.directive';
 import { NgIfAugmentedDirective } from './ng-if-augmentation.directive';
@@ -10,6 +11,7 @@ import {
 import { NgSubscribeDirective } from './ng-subscribe.directive';
 import { TypedNgTemplateDirective } from './typed-ng-template.directive';
 
+export { FormControlNameAugmentationDirective } from './form-control-name-augmentation.directive';
 export { NgForAugmentationDirective } from './ng-for-augmentation.directive';
 export { NgForTrackIdDirective } from './ng-for-track-id.directive';
 export { NgIfAugmentedDirective } from './ng-if-augmentation.directive';
@@ -26,6 +28,7 @@ export { TypedNgTemplateDirective } from './typed-ng-template.directive';
  * @internal
  */
 export const LIB_DIRECTIVES = [
+  FormControlNameAugmentationDirective,
   NgLetDirective,
   NgSubscribeDirective,
   NgForAugmentationDirective,
