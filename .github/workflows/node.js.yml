@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   pull_request:
-    branches: 
+    branches:
      - main
      - dev
 
@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.13]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -27,7 +27,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: Install dependencies
-      run: npm i --legacy-peer-deps
+      run: npm i
     - run: npm run build:lib --if-present
 
   lint:
@@ -36,7 +36,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.13]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -56,7 +56,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.13]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:

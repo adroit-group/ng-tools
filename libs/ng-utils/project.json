@@ -1,6 +1,7 @@
 {
+  "name": "ng-utils",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/ng-utils",
   "sourceRoot": "libs/ng-utils/src",
   "prefix": "ad",
   "targets": {
@@ -24,7 +25,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/ng-utils"],
       "options": {
-        "jestConfig": "libs/ng-utils/jest.config.js",
+        "jestConfig": "libs/ng-utils/jest.config.ts",
         "passWithNoTests": false
       }
     },
