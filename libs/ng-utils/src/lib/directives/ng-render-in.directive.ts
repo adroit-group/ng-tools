@@ -79,7 +79,7 @@ export class NgRenderInDirective implements OnInit, OnDestroy {
   selector: '[ngRenderInBrowser]',
 })
 export class NgRenderInBrowserDirective extends NgRenderInDirective {
-  @Input('ngRenderIn')
+  @Input('ngRenderInBrowser')
   public override readonly platform = EApplicationPlatform.browser;
 
   @Input('ngRenderInBrowserOr')
@@ -102,7 +102,7 @@ export class NgRenderInBrowserDirective extends NgRenderInDirective {
   selector: '[ngRenderInServer]',
 })
 export class NgRenderInServerDirective extends NgRenderInDirective {
-  @Input('ngRenderIn')
+  @Input('ngRenderInServer')
   public override readonly platform = EApplicationPlatform.server;
 
   @Input('ngRenderInServerOr')
