@@ -102,7 +102,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["{workspaceRoot}/coverage/apps/ng-util-demo"],
+          "outputs": [
+            "coverage/apps/ng-util-demo"
+          ],
           "options": {
             "jestConfig": "apps/ng-util-demo/jest.config.ts",
             "passWithNoTests": true
@@ -156,7 +158,9 @@
       "targets": {
         "build": {
           "executor": "@nrwl/angular:package",
-          "outputs": ["{workspaceRoot}/dist/libs/ng-utils"],
+          "outputs": [
+            "dist/libs/ng-utils"
+          ],
           "options": {
             "project": "libs/ng-utils/ng-package.json"
           },
@@ -172,7 +176,9 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["{workspaceRoot}/coverage/libs/ng-utils"],
+          "outputs": [
+            "coverage/libs/ng-utils"
+          ],
           "options": {
             "jestConfig": "libs/ng-utils/jest.config.ts",
             "passWithNoTests": false
