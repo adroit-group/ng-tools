@@ -313,13 +313,13 @@ export class NgSubscribeDirective<T> implements OnInit, OnDestroy {
         } else {
           const observableMapKeys = Object.keys(input);
 
-          return Object.values(merged).reduce(
+          return Object.values(merged as unknown as object).reduce(
             (acc, curr, index) => ({
               ...acc,
               [observableMapKeys[index]]: curr,
             }),
             {}
-          );
+          ) as T;
         }
       })
     );

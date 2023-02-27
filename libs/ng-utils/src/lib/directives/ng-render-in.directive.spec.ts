@@ -38,7 +38,7 @@ describe('Directive: NgRenderIn', () => {
   describe('Alternate template', () => {
     beforeEach(() => {
       spectator = createDirective(
-        `<div *ngRenderIn="'browser'; else serverTpl" #container>
+        `<div *ngRenderIn="'browser'; or serverTpl" #container>
           <div #content></div>
         </div>
 

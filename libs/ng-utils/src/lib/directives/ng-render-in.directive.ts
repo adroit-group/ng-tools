@@ -10,8 +10,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-
-import { EApplicationPlatform } from '../enums';
+import { EApplicationPlatform } from '../constants';
 import { PlatformObserverService } from '../services';
 
 /**
@@ -20,6 +19,11 @@ import { PlatformObserverService } from '../services';
  *
  * @example ```html
  * <app-splash-screen *ngRenderIn="'browser'"></app-splash-screen>
+ *
+ * <!-- With alternative template -->
+ * <app-splash-screen *ngRenderIn="'browser' or ssrTpl"></app-splash-screen>
+ *
+ * <ng-template #ssrTpl>...</ng-template>
  * ```
  *
  * There are two utility versions of this directive
@@ -30,9 +34,9 @@ import { PlatformObserverService } from '../services';
   selector: '[ngRenderIn]',
 })
 export class NgRenderInDirective implements OnInit, OnDestroy {
-  @Input('ngRenderInElse') public alternativeTemplate?: TemplateRef<unknown>;
+  @Input('ngRenderInOr') public alternativeTemplate?: TemplateRef<unknown>;
 
-  @Input('ngRenderIn') public platform!: EApplicationPlatform;
+  @Input('ngRenderIn') public platform!: keyof typeof EApplicationPlatform;
 
   protected _embeddedView!: EmbeddedViewRef<unknown>;
 
@@ -64,16 +68,21 @@ export class NgRenderInDirective implements OnInit, OnDestroy {
  *
  * @example ```html
  * <app-splash-screen *ngRenderInBrowser></app-splash-screen>
+ *
+ * <!-- With alternative template -->
+ * <app-splash-screen *ngRenderInBrowser="or ssrTpl"></app-splash-screen>
+ *
+ * <ng-template #ssrTpl>...</ng-template>
  * ```
  */
 @Directive({
   selector: '[ngRenderInBrowser]',
 })
 export class NgRenderInBrowserDirective extends NgRenderInDirective {
-  @Input('ngRenderIn')
-  public override readonly platform = EApplicationPlatform.Browser;
+  @Input('ngRenderInBrowser')
+  public override readonly platform = EApplicationPlatform.browser;
 
-  @Input('ngRenderInBrowserElse')
+  @Input('ngRenderInBrowserOr')
   public override alternativeTemplate?: TemplateRef<unknown>;
 }
 
@@ -82,15 +91,20 @@ export class NgRenderInBrowserDirective extends NgRenderInDirective {
  *
  * @example ```html
  * <app-splash-screen *ngRenderInServer></app-splash-screen>
+ *
+ * <!-- With alternative template -->
+ * <app-splash-screen *ngRenderInServer="or browserTpl"></app-splash-screen>
+ *
+ * <ng-template #browserTpl>...</ng-template>
  * ```
  */
 @Directive({
   selector: '[ngRenderInServer]',
 })
 export class NgRenderInServerDirective extends NgRenderInDirective {
-  @Input('ngRenderIn')
-  public override readonly platform = EApplicationPlatform.Server;
+  @Input('ngRenderInServer')
+  public override readonly platform = EApplicationPlatform.server;
 
-  @Input('ngRenderInServerElse')
+  @Input('ngRenderInServerOr')
   public override alternativeTemplate?: TemplateRef<unknown>;
 }

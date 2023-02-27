@@ -10,7 +10,9 @@
       "targets": {
         "build": {
           "executor": "@angular-devkit/build-angular:browser",
-          "outputs": ["{options.outputPath}"],
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/apps/ng-util-demo",
             "index": "apps/ng-util-demo/src/index.html",
@@ -22,7 +24,9 @@
               "apps/ng-util-demo/src/favicon.ico",
               "apps/ng-util-demo/src/assets"
             ],
-            "styles": ["apps/ng-util-demo/src/styles.scss"]
+            "styles": [
+              "apps/ng-util-demo/src/styles.scss"
+            ]
           },
           "configurations": {
             "production": {
@@ -92,7 +96,9 @@
               "apps/ng-util-demo/src/**/*.html"
             ]
           },
-          "outputs": ["{options.outputFile}"]
+          "outputs": [
+            "{options.outputFile}"
+          ]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -127,13 +133,19 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/ng-util-demo-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": [
+              "apps/ng-util-demo-e2e/**/*.{js,ts}"
+            ]
           },
-          "outputs": ["{options.outputFile}"]
+          "outputs": [
+            "{options.outputFile}"
+          ]
         }
       },
       "tags": [],
-      "implicitDependencies": ["ng-util-demo"]
+      "implicitDependencies": [
+        "ng-util-demo"
+      ]
     },
     "ng-utils": {
       "$schema": "..\\..\\node_modules\\nx\\schemas\\project-schema.json",
@@ -176,7 +188,9 @@
               "libs/ng-utils/ngx-cdps-meter/**/*.html"
             ]
           },
-          "outputs": ["{options.outputFile}"]
+          "outputs": [
+            "{options.outputFile}"
+          ]
         }
       },
       "tags": []
