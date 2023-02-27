@@ -3,6 +3,10 @@
  */
 export { ASingletonModule, ModuleLoadError } from './lib/classes';
 /**
+ * ? Directives
+ */
+export { EApplicationPlatform } from './lib/constants';
+/**
  * ? Decorators
  */
 export { AutoHooks } from './lib/decorators';
@@ -41,7 +45,7 @@ export { AdroitNgUtilsModule } from './lib/ng-utils.module';
 /**
  * ? Pipes
  */
-export { MethodInvokerPipe } from './lib/pipes';
+export { MethodInvokerPipe, SafePipe } from './lib/pipes';
 /**
  * ? Services
  */
