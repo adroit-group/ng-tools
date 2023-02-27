@@ -14,7 +14,7 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
 
 |  Package version |  Angular version |
 |------------------|------------------|
-| 0.3.x           | 13.x             |
+| 0.3.x            | 13.x             |
 | 14.x             | 14.x             |
 | 15.x             | 15.x             |
 

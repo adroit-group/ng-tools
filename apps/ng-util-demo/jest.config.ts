@@ -1,5 +1,4 @@
 /* eslint-disable */
-/* eslint-disable */
 export default {
   displayName: 'ng-util-demo',
   preset: '../../jest.preset.js',
