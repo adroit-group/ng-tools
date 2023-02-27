@@ -10,9 +10,18 @@ Handy utilities for Angular development
 
 All notable changes to this project are documented in [CHANGELOG.md](https://github.com/Adroit-Group/ng-tools/blob/master/CHANGELOG.md) file.
 
+## Versioning
+
+|  Package version |  Angular version |
+|------------------|------------------|
+| 0.3.x           | 13.x             |
+| 14.x             | 14.x             |
+| 15.x             | 15.x             |
+
 ## Table of contents
 
 - [NG Utils](#ng-utils)
+  - [Versioning](#versioning)
   - [Table of contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
