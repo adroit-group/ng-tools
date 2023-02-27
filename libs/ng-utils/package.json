@@ -1,4 +1,11 @@
 {
   "name": "@adroit-group/ng-utils",
-  "version": "0.2.2"
+  "version": "14.0.0",
+  "license": "MIT",
+  "private": false,
+  "homepage": "https://github.com/Adroit-Group/ng-tools",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Adroit-Group/ng-tools"
+  }
 }

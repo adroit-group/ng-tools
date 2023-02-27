@@ -1,4 +1,6 @@
-module.exports = {
+/* eslint-disable */
+/* eslint-disable */
+export default {
   displayName: 'ng-utils',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
