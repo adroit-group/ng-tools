@@ -12,11 +12,11 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
 
 ## Versioning
 
-|  Package version |  Angular version |
-|------------------|------------------|
-| 0.3.x            | 13.x             |
-| 14.x             | 14.x             |
-| 15.x             | 15.x             |
+| Package version | Angular version |
+| --------------- | --------------- |
+| 0.3.x           | 13.x            |
+| 14.x            | 14.x            |
+| 15.x            | 15.x            |
 
 ## Table of contents
 
@@ -46,6 +46,7 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
     - [Platform Observer](#platform-observer)
   - [Pipes](#pipes)
     - [Method Invoker](#method-invoker)
+    - [Safe Pipe](#safe-pipe)
   - [Mixins](#mixins)
     - [Subscription Handler](#subscription-handler)
     - [Media Observer](#media-observer)
@@ -405,6 +406,46 @@ export class MyComponent {
 
 ```html
 <p>{{ componentMethodThatUsesThis | invoke }}</p>
+```
+
+[⬆ Back to top](#table-of-contents)
+
+### Safe Pipe
+
+A pipe that bypasses Angular's built-in sanitization for the following security contexts:
+
+- HTML
+- Style
+- Script
+- URL
+- Resource URL
+
+The pipe assumes HTML content to be sanitized by default.
+
+Usage:
+
+```html
+{{ value | safe }}
+```
+
+```html
+{{ value | safe:'html' }}
+```
+
+```html
+{{ value | safe:'style' }}
+```
+
+```html
+{{ value | safe:'script' }}
+```
+
+```html
+{{ value | safe:'url' }}
+```
+
+```html
+{{ value | safe:'resourceUrl' }}
 ```
 
 [⬆ Back to top](#table-of-contents)
