@@ -34,9 +34,9 @@ import { PlatformObserverService } from '../services';
   selector: '[ngRenderIn]',
 })
 export class NgRenderInDirective implements OnInit, OnDestroy {
-  @Input('ngRenderInOr') public alternativeTemplate?: TemplateRef<unknown>;
-
   @Input('ngRenderIn') public platform!: keyof typeof EApplicationPlatform;
+
+  @Input('ngRenderInOr') public alternativeTemplate?: TemplateRef<unknown>;
 
   protected _embeddedView!: EmbeddedViewRef<unknown>;
 
@@ -79,7 +79,6 @@ export class NgRenderInDirective implements OnInit, OnDestroy {
   selector: '[ngRenderInBrowser]',
 })
 export class NgRenderInBrowserDirective extends NgRenderInDirective {
-  @Input('ngRenderInBrowser')
   public override readonly platform = EApplicationPlatform.browser;
 
   @Input('ngRenderInBrowserOr')
@@ -102,7 +101,6 @@ export class NgRenderInBrowserDirective extends NgRenderInDirective {
   selector: '[ngRenderInServer]',
 })
 export class NgRenderInServerDirective extends NgRenderInDirective {
-  @Input('ngRenderInServer')
   public override readonly platform = EApplicationPlatform.server;
 
   @Input('ngRenderInServerOr')

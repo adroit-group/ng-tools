@@ -2,7 +2,11 @@
 
 import { CommonModule } from '@angular/common';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator';
-import { NgRenderInDirective } from './ng-render-in.directive';
+import {
+  NgRenderInBrowserDirective,
+  NgRenderInDirective,
+  NgRenderInServerDirective,
+} from './ng-render-in.directive';
 
 describe('Directive: NgRenderIn', () => {
   let spectator: SpectatorDirective<NgRenderInDirective>;
@@ -61,5 +65,63 @@ describe('Directive: NgRenderIn', () => {
 
   afterEach(() => {
     directive?.ngOnDestroy();
+  });
+});
+
+describe('Directive: NgRenderInBrowserDirective', () => {
+  let spectator: SpectatorDirective<NgRenderInBrowserDirective>;
+  let directive: NgRenderInBrowserDirective;
+
+  const createDirective = createDirectiveFactory({
+    directive: NgRenderInBrowserDirective,
+    imports: [CommonModule],
+  });
+
+  beforeEach(() => {
+    spectator = createDirective(
+      `<div *ngRenderInBrowser="or serverTpl" #container>
+          <div #content></div>
+        </div>
+
+        <ng-template #serverTpl>
+          <div #serverContainer></div>
+        </ng-template>`
+    );
+
+    directive = spectator.directive;
+  });
+
+  it('should render serverTpl', () => {
+    const serverTpl = spectator.query('#serverTpl');
+    const browserTpl = spectator.query('container');
+
+    expect(browserTpl).toBeFalsy();
+    expect(serverTpl).toBeDefined();
+  });
+});
+
+describe('NgRenderInServerDirective', () => {
+  let spectator: SpectatorDirective<NgRenderInServerDirective>;
+  let directive: NgRenderInServerDirective;
+
+  const createDirective = createDirectiveFactory({
+    directive: NgRenderInServerDirective,
+    imports: [CommonModule],
+  });
+
+  beforeEach(() => {
+    spectator = createDirective(
+      `<div *ngRenderInServer #container>
+          <div #content></div>
+        </div>`
+    );
+
+    directive = spectator.directive;
+  });
+
+  it('should render serverTpl', () => {
+    const serverTpl = spectator.query('container');
+
+    expect(serverTpl).toBeDefined();
   });
 });
