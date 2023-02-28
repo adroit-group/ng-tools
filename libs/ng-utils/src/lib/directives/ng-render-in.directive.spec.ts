@@ -1,5 +1,4 @@
 /* tslint:disable:no-unused-variable */
-
 import { CommonModule } from '@angular/common';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator';
 import {
@@ -70,7 +69,6 @@ describe('Directive: NgRenderIn', () => {
 
 describe('Directive: NgRenderInBrowserDirective', () => {
   let spectator: SpectatorDirective<NgRenderInBrowserDirective>;
-  let directive: NgRenderInBrowserDirective;
 
   const createDirective = createDirectiveFactory({
     directive: NgRenderInBrowserDirective,
@@ -87,8 +85,6 @@ describe('Directive: NgRenderInBrowserDirective', () => {
           <div #serverContainer></div>
         </ng-template>`
     );
-
-    directive = spectator.directive;
   });
 
   it('should render serverTpl', () => {
@@ -102,7 +98,6 @@ describe('Directive: NgRenderInBrowserDirective', () => {
 
 describe('NgRenderInServerDirective', () => {
   let spectator: SpectatorDirective<NgRenderInServerDirective>;
-  let directive: NgRenderInServerDirective;
 
   const createDirective = createDirectiveFactory({
     directive: NgRenderInServerDirective,
@@ -115,8 +110,6 @@ describe('NgRenderInServerDirective', () => {
           <div #content></div>
         </div>`
     );
-
-    directive = spectator.directive;
   });
 
   it('should render serverTpl', () => {
