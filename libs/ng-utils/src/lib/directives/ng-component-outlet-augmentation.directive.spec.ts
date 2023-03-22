@@ -1,80 +1,103 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @angular-eslint/component-selector */
+/* tslint:disable:no-unused-variable */
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator';
 import {
-    Directive,
-    ElementRef,
-    Injectable,
-    OnInit,
-    TemplateRef,
-    ViewContainerRef
-} from '@angular/core';
+  NgComponentOutletAugmentationDirective,
+  NgComponentOutletEvent,
+} from './ng-component-outlet-augmentation.directive';
 
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
-
-// A simple service, might have contained more logic,
-// but it is redundant for the test demonstration.
-@Injectable()
-class TargetService {
-    public readonly value = true;
-}
-
-// The purpose of the directive is to add a background color
-// on mouseenter and to remove it on mouseleave.
-@Directive({
-    providers: [TargetService],
-    selector: '[target]'
+@Component({
+  selector: 'app-test',
+  template: `
+    <button id="test-btn" (click)="testEvent.emit(testData.id)">{{ testData?.id }}</button>`,
 })
-class TargetDirective implements OnInit {
-    public constructor(
-        public readonly service: TargetService,
-        protected ref: ElementRef,
-        protected templateRef: TemplateRef<void>,
-        protected viewContainerRef: ViewContainerRef
-    ) {}
+export class TestComponent {
+  @Input() public testData!: { id: string };
 
-    public ngOnInit(): void {
-        this.viewContainerRef.clear();
-        if (this.service.value) {
-            this.viewContainerRef.createEmbeddedView(this.templateRef);
-        }
-    }
+  @Output() public readonly testEvent = new EventEmitter<string>();
 }
 
-describe('TestProviderInDirective', () => {
-    ngMocks.faster(); // the same TestBed for several its.
+describe('Directive: NgComponentOutletAugmentation', () => {
+  let spectator: SpectatorDirective<NgComponentOutletAugmentationDirective>;
 
-    // Because we want to test the service, we pass it as the first
-    // parameter of MockBuilder.
-    // Because we do not care about TargetDirective, we pass it as
-    // the second parameter for being replaced with a mock copy.
-    // Do not forget to return the promise of MockBuilder.
-    beforeEach(() => MockBuilder(TargetService, TargetDirective));
+  const createDirective = createDirectiveFactory({
+    directive: NgComponentOutletAugmentationDirective,
+    declarations: [TestComponent],
+    imports: [CommonModule],
+  });
 
-    it('has access to the service via a directive', () => {
-        // Let's render a div with the directive.
-        MockRender('<div target></div>');
+  it('should create and bind inputs', () => {
+    spectator = createDirective(
+      `
+        <ng-container *ngComponentOutlet="testComponent; inputs: { testData: testData }">
+        </ng-container>
+      `,
+      {
+        hostProps: {
+          testData: {
+            id: 'test',
+          },
+          testComponent: TestComponent,
+        },
+      }
+    );
 
-        // Let's find the debugElement with the directive.
-        // Please note, that we use ngMocks.find here.
-        const el = ngMocks.find(TargetDirective);
+    const component = spectator.query(TestComponent);
+    expect(component).toBeDefined();
 
-        // Let's extract the service.
-        const service = ngMocks.get(el, TargetService);
+    expect(spectator.directive).toBeDefined();
+    expect(spectator.directive.inputs).toEqual({ testData: { id: 'test' } });
 
-        // Here we go, now we can assert everything about the service.
-        expect(service.value).toEqual(true);
+    const testCompButton = spectator.query('button#test-btn');
+    expect(testCompButton).toBeDefined();
+    expect(testCompButton?.innerHTML).toContain('test');
+  });
+
+  it('should create and bind outputs', () => {
+    const compEventHandler = (event: NgComponentOutletEvent) => {
+      expect(event?.key).toEqual('testEvent');
+      expect(event?.event).toEqual('test');
+    };
+
+    const mockFnContainer = { fn: compEventHandler };
+
+    jest.spyOn(mockFnContainer, 'fn');
+
+    spectator = createDirective(
+      `
+        <ng-template
+          [ngComponentOutlet]="testComponent"
+          [ngComponentOutletInputs]="{ testData: testData }"
+          (ngComponentOutletOutputs)="compEventHandler($event)">
+        </ng-template>
+      `,
+      {
+        hostProps: {
+          compEventHandler: mockFnContainer.fn,
+          testData: {
+            id: 'test',
+          },
+          testComponent: TestComponent,
+        },
+      }
+    );
+
+    const component = spectator.query(TestComponent);
+    expect(component).toBeDefined();
+
+    expect(spectator.directive).toBeDefined();
+
+    const testCompButton = spectator.query('button#test-btn');
+    expect(testCompButton).toBeDefined();
+
+    spectator.click(testCompButton!);
+
+    expect(mockFnContainer.fn).toHaveBeenCalledWith({
+      key: 'testEvent',
+      event: 'test',
     });
-
-    it('has access to the service via a structural directive', () => {
-        // Let's render a div with the directive.
-        MockRender('<div *target></div>');
-
-        // Let's find the debugNode with the directive.
-        // Please note, that we use ngMocks.reveal here.
-        const node = ngMocks.reveal(TargetDirective);
-
-        // Let's extract the service.
-        const service = ngMocks.get(node, TargetService);
-
-        // Here we go, now we can assert everything about the service.
-        expect(service.value).toEqual(true);
-    });
+  });
 });

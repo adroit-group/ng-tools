@@ -1,5 +1,8 @@
+/* eslint-disable @angular-eslint/no-output-rename */
+/* eslint-disable @angular-eslint/no-input-rename */
 /* eslint-disable @angular-eslint/directive-selector */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import type { NgComponentOutlet } from '@angular/common';
 import {
   ComponentRef,
   Directive,
@@ -7,14 +10,11 @@ import {
   Injector,
   Input,
   NgModuleRef,
-  OnChanges,
-  OnDestroy,
   Output,
   SimpleChanges,
   Type,
   ViewContainerRef,
 } from '@angular/core';
-import { NgComponentOutlet } from '@angular/common';
 
 /**
  * Interface for the event emitted by the {@link NgComponentOutletAugmentationDirective}
@@ -25,62 +25,53 @@ export interface NgComponentOutletEvent {
 }
 
 /**
- * {@inheritdoc NgComponentOutlet}
+ * Augments the {@link NgComponentOutlet} directive to allow for binding of inputs and outputs
  */
 @Directive({
   selector: '[ngComponentOutlet]',
   exportAs: 'ngComponentOutlet',
 })
-export class NgComponentOutletAugmentationDirective
-  implements OnChanges, OnDestroy
-{
-  @Input() public ngComponentOutlet: Type<unknown> | null = null;
+export class NgComponentOutletAugmentationDirective {
+  @Input('gComponentOutlet') public component: Type<unknown> | null = null;
 
-  @Input() public ngComponentOutletInjector?: Injector;
+  @Input('ngComponentOutletInjector') public injector?: Injector;
 
-  @Input() public ngComponentOutletContent?: Node[][];
+  @Input('ngComponentOutletContent') public content?: Node[][];
 
-  @Input() public ngComponentOutletNgModule?: Type<unknown>;
+  @Input('ngComponentOutletNgModule') public ngModule?: Type<unknown>;
 
-  @Input() public ngComponentOutletInputs?: Record<string, unknown>;
+  @Input('ngComponentOutletInputs') public inputs?: Record<string, unknown>;
 
-  @Output() public readonly componentEvent =
+  @Output('ngComponentOutletOutputs') public readonly componentEvent =
     new EventEmitter<NgComponentOutletEvent>();
 
-  public componentRef: ComponentRef<Record<string, unknown>> | undefined;
+  private originalNgOnChanges!: (changes: SimpleChanges) => void;
+
+  public get componentRef(): ComponentRef<Record<string, unknown>> | undefined {
+    return this.ngComponentOutlet['_componentRef'];
+  }
 
   public readonly moduleRef: NgModuleRef<unknown> | undefined;
 
-  constructor(public readonly viewContainerRef: ViewContainerRef) {}
+  constructor(
+    public readonly viewContainerRef: ViewContainerRef,
+    public readonly ngComponentOutlet: NgComponentOutlet
+  ) {
+    this.originalNgOnChanges = this.ngComponentOutlet.ngOnChanges.bind(
+      this.ngComponentOutlet
+    );
+    this.ngComponentOutlet.ngOnChanges = this.augmentedNgOnChanges.bind(this);
+  }
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    this.clearComponentIfNeeded(changes);
+  private augmentedNgOnChanges(changes: SimpleChanges): void {
+    this.originalNgOnChanges(changes);
 
-    if (!this.componentRef && this.ngComponentOutlet) {
-      this.createComponent();
+    const compChange = changes['ngComponentOutlet'];
+    if (compChange && compChange?.currentValue !== compChange?.previousValue) {
       this.hookUpOutputs();
     }
 
     this.hookUpInputs();
-  }
-
-  public ngOnDestroy(): void {
-    if (this.moduleRef) this.moduleRef.destroy();
-  }
-
-  private createComponent(): void {
-    const injector: Injector =
-      this.ngComponentOutletInjector || this.viewContainerRef.parentInjector;
-
-    this.componentRef = this.viewContainerRef.createComponent(
-      this.ngComponentOutlet as Type<Record<string, unknown>>,
-      {
-        index: this.viewContainerRef.length,
-        injector,
-        ngModuleRef: this.moduleRef,
-        projectableNodes: this.ngComponentOutletContent,
-      }
-    );
   }
 
   private hookUpOutputs(): void {
@@ -94,21 +85,14 @@ export class NgComponentOutletAugmentationDirective
   }
 
   private hookUpInputs(): void {
-    if (this.ngComponentOutletInputs && this.componentRef) {
-      for (const [key, value] of Object.entries(this.ngComponentOutletInputs)) {
+    if (!this.inputs || typeof this.inputs !== 'object') {
+      return;
+    }
+
+    if (this.inputs && this.componentRef) {
+      for (const [key, value] of Object.entries(this.inputs)) {
         this.componentRef.setInput(key, value);
       }
-    }
-  }
-
-  private clearComponentIfNeeded(changes: SimpleChanges): void {
-    if (
-      changes['ngComponentOutlet']?.currentValue &&
-      changes['ngComponentOutlet']?.currentValue !==
-        changes['ngComponentOutlet']?.previousValue
-    ) {
-      this.viewContainerRef.clear();
-      this.componentRef = undefined;
     }
   }
 }
