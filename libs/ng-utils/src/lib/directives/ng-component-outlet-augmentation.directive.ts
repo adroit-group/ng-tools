@@ -2,7 +2,7 @@
 /* eslint-disable @angular-eslint/no-input-rename */
 /* eslint-disable @angular-eslint/directive-selector */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import type { NgComponentOutlet } from '@angular/common';
+import { NgComponentOutlet } from '@angular/common';
 import {
   ComponentRef,
   Directive,
@@ -25,7 +25,52 @@ export interface NgComponentOutletEvent {
 }
 
 /**
- * Augments the {@link NgComponentOutlet} directive to allow for binding of inputs and outputs
+ * Augments the {@link NgComponentOutlet} directive to allow for binding of inputs and outputs.
+ *
+ * @example
+ * In your lazy loaded component define the input and outputs you wish to bind to.
+ *
+ * ```ts
+ * \@Component({
+ *  selector: 'lazy-loaded-component',
+ *  template: `...`
+ * })
+ * export class LazyLoadedComponent {
+ *  \@Input() public input1: string;
+ *
+ * \@Output() public output1 = new EventEmitter<string>();
+ * }
+ *
+ * ```
+ *
+ * In the template where you wish to use the component, use the directive to bind the inputs and outputs.
+ *
+ * ```html
+ * <ng-container *ngComponentOutlet="lazyLoadedComp$ | async; inputs: { input1: 'test' }"></ng-container>
+ * ```
+ *
+ * If you want to bind to the lazy loaded components outputs' as well, then you have to use the non-micro-syntax version of the directive, as the micro-syntax version does not support binding to outputs.
+ *
+ * ```html
+ * <ng-container
+ *  [ngComponentOutlet]="lazyLoadedComp$ | async"
+ *  [ngComponentOutletInputs]="{ input1: 'test' }"
+ *  [ngComponentOutletOutputs]="onComponentEvent($event)">
+ * </ng-container>
+ * ```
+ *
+ * Then in your component, you can handle the event like so:
+ *
+ * ```ts
+ *
+ * export class MyComponentThatUsesLazyLoadedComponent {
+ *  public onComponentEvent(event: NgComponentOutletEvent): void {
+ *    if (event.key === 'output1') {
+ *      // do something with the received event data through event.event
+ *    }
+ *  }
+ * }
+ * ```
  */
 @Directive({
   selector: '[ngComponentOutlet]',
