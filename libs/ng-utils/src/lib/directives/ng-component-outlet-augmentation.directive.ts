@@ -77,7 +77,7 @@ export interface NgComponentOutletEvent {
   exportAs: 'ngComponentOutlet',
 })
 export class NgComponentOutletAugmentationDirective {
-  @Input('gComponentOutlet') public component: Type<unknown> | null = null;
+  @Input('ngComponentOutlet') public component: Type<unknown> | null = null;
 
   @Input('ngComponentOutletInjector') public injector?: Injector;
 
@@ -112,7 +112,7 @@ export class NgComponentOutletAugmentationDirective {
     this.originalNgOnChanges(changes);
 
     const compChange = changes['ngComponentOutlet'];
-    if (compChange && compChange?.currentValue !== compChange?.previousValue) {
+    if (compChange && compChange.currentValue !== compChange.previousValue) {
       this.hookUpOutputs();
     }
 
