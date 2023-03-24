@@ -15,6 +15,7 @@ export { AutoHooks } from './lib/decorators';
  */
 export {
   FormControlNameAugmentationDirective,
+  NgComponentOutletAugmentationDirective,
   NgForAugmentationDirective,
   NgForTrackIdDirective,
   NgIfAugmentedDirective,
