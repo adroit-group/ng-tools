@@ -52,6 +52,9 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
     - [Subscription Handler](#subscription-handler)
     - [Media Observer](#media-observer)
     - [TrackBy Handler](#trackby-handler)
+  - [DI Unchained](#di-unchained)
+    - [`WithDiContext`](#withdicontext)
+    - [`DIContextProvider`](#dicontextprovider)
   - [Development environment](#development-environment)
 
 ## Installation
@@ -558,6 +561,75 @@ class MyComp extends TrackByHandlerMixin() {
 
 ```html
 <div *ngFor="pics of pictures; trackBy: trackBy">...</div>
+```
+
+[⬆ Back to top](#table-of-contents)
+
+## DI Unchained
+
+A DI library that allows you to use DI without the need to use the @Injectable decorator. This is useful when you want to use DI in a class that is not injectable (e.g. a mixin).
+
+There are TS decorators exposed by this package:
+
+- `WithDiContext`: A multi purpose decorator that allows you to use DI in any class without the need to use the @Injectable decorator.
+- `DIContextProvider`: A class decorator that marks an Angular NgModule as the DI provider for `@Unchained` classes.
+
+### `WithDiContext`
+
+Decorator that frees your classes from the shackles of Angular DI.
+Allowing them to fully utilize it without requiring Angular's class decorators: Component, Directive, Injectable, Pipe, Module.
+
+The decorator can be used as a class, method, get/set accessor decorator.
+
+```ts
+@Unchained()
+class MyClass {
+  router: Router;
+
+  routerFn = () => inject(Router);
+
+  static routerFn = () => inject(Router);
+
+  constructor() {
+    this.router = inject(Router);
+  }
+
+  getTitleService() {
+    const title = inject(Title);
+
+    console.log('title: ', title);
+  }
+
+  public get neta() {
+    return inject(Meta);
+  }
+
+  public static get appRef() {
+    return inject(ApplicationRef);
+  }
+
+  static getRouter() {
+    return inject(Router);
+  }
+}
+```
+
+### `DIContextProvider`
+
+An Angular ngModule class decorator the marks an Angular NgModule as the DI provider for `@Unchained` classes.
+
+You have to use this decorator on your root module (AppModule) in order to use `@Unchained` decorator on non Angular classes.
+
+The normal DI resolution rules apply to `Unchained` classes and their providers as well.
+e.g.: Providers provided in their own lazy-loaded modules' providers array ARE NOT resolvable in other modules contexts.
+
+```ts
+@DI()
+@NgModule({
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
 ```
 
 [⬆ Back to top](#table-of-contents)
