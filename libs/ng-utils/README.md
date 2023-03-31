@@ -26,6 +26,7 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
   - [Installation](#installation)
   - [Usage](#usage)
   - [Configuration](#configuration)
+  - [Package structure](#package-structure)
   - [Decorators](#decorators)
     - [Auto hooks](#auto-hooks)
       - [Quick rundown of usage:](#quick-rundown-of-usage)
@@ -36,6 +37,7 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
   - [Directives](#directives)
     - [NgLet Directive](#nglet-directive)
     - [NgSubscribe Directive](#ngsubscribe-directive)
+    - [NgComponentOutlet Augmentation Directive](#ngcomponentoutlet-augmentation-directive)
     - [NgFor Augmentation Directive](#ngfor-augmentation-directive)
     - [NgIf Augmentation Directive](#ngif-augmentation-directive)
     - [NgRenderIn Directive](#ngrenderin-directive)
@@ -51,6 +53,9 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
     - [Subscription Handler](#subscription-handler)
     - [Media Observer](#media-observer)
     - [TrackBy Handler](#trackby-handler)
+  - [DI Unchained](#di-unchained)
+    - [`WithDiContext`](#withdicontext)
+    - [`DIContextProvider`](#dicontextprovider)
   - [Development environment](#development-environment)
 
 ## Installation
@@ -84,6 +89,18 @@ import { AdroitNgUtilsModule } from 'ng-utils';
   ]
 })
 ```
+
+[⬆ Back to top](#table-of-contents)
+
+## Package structure
+
+Ng utils is a monorepo that contains multiple packages. The main package that contains most of the useful stuff we've developed is `@adroit-group/ng-utils`. When you use the library, you should only import from this package. No need to specify any sub-package paths.
+
+However there are some sub-packages that are useful on their own. These are:
+
+- `@adroit-group/ng-utils/di-unchained` - A DI library that allows you to use DI without the need to use the `@Injectable` decorator. This is useful when you want to use DI in a class that is not injectable (e.g. a mixin).
+
+When you want to use these make sure to import from the proper sub-package.
 
 [⬆ Back to top](#table-of-contents)
 
@@ -277,6 +294,57 @@ A structural directive that allows the definition of template variables from asy
 ```
 
 The directive utilizes the Angular language service's capabilities and gives you full type checking in it's template.
+
+[⬆ Back to top](#table-of-contents)
+
+### NgComponentOutlet Augmentation Directive
+
+Augments the {@link NgComponentOutlet} directive to allow for binding of inputs and outputs.
+
+In your lazy loaded component define the input and outputs you wish to bind to.
+
+```ts
+@Component({
+  selector: 'lazy-loaded-component',
+  template: `...`,
+})
+export class LazyLoadedComponent {
+  @Input() public input1: string;
+
+  @Output() public output1 = new EventEmitter<string>();
+}
+```
+
+In the template where you wish to use the component, use the directive to bind the inputs and outputs.
+
+```html
+<ng-container
+  *ngComponentOutlet="lazyLoadedComp$ | async; inputs: { input1: 'test' }"
+></ng-container>
+```
+
+If you want to bind to the lazy loaded components outputs' as well, then you have to use the non-micro-syntax version of the directive, as the micro-syntax version does not support binding to outputs.
+
+```html
+<ng-container
+  [ngComponentOutlet]="lazyLoadedComp$ | async"
+  [ngComponentOutletInputs]="{ input1: 'test' }"
+  [ngComponentOutletOutputs]="onComponentEvent($event)"
+>
+</ng-container>
+```
+
+Then in your component, you can handle the event like so:
+
+```ts
+export class MyComponentThatUsesLazyLoadedComponent {
+  public onComponentEvent(event: NgComponentOutletEvent): void {
+    if (event.key === 'output1') {
+      // do something with the received event data through event.event
+    }
+  }
+}
+```
 
 [⬆ Back to top](#table-of-contents)
 
@@ -506,6 +574,75 @@ class MyComp extends TrackByHandlerMixin() {
 
 ```html
 <div *ngFor="pics of pictures; trackBy: trackBy">...</div>
+```
+
+[⬆ Back to top](#table-of-contents)
+
+## DI Unchained
+
+A DI library that allows you to use DI without the need to use the @Injectable decorator. This is useful when you want to use DI in a class that is not injectable (e.g. a mixin).
+
+There are TS decorators exposed by this package:
+
+- `WithDiContext`: A multi purpose decorator that allows you to use DI in any class without the need to use the @Injectable decorator.
+- `DIContextProvider`: A class decorator that marks an Angular NgModule as the DI provider for `@Unchained` classes.
+
+### `WithDiContext`
+
+Decorator that frees your classes from the shackles of Angular DI.
+Allowing them to fully utilize it without requiring Angular's class decorators: Component, Directive, Injectable, Pipe, Module.
+
+The decorator can be used as a class, method, get/set accessor decorator.
+
+```ts
+@Unchained()
+class MyClass {
+  router: Router;
+
+  routerFn = () => inject(Router);
+
+  static routerFn = () => inject(Router);
+
+  constructor() {
+    this.router = inject(Router);
+  }
+
+  getTitleService() {
+    const title = inject(Title);
+
+    console.log('title: ', title);
+  }
+
+  public get neta() {
+    return inject(Meta);
+  }
+
+  public static get appRef() {
+    return inject(ApplicationRef);
+  }
+
+  static getRouter() {
+    return inject(Router);
+  }
+}
+```
+
+### `DIContextProvider`
+
+An Angular ngModule class decorator the marks an Angular NgModule as the DI provider for `@Unchained` classes.
+
+You have to use this decorator on your root module (AppModule) in order to use `@Unchained` decorator on non Angular classes.
+
+The normal DI resolution rules apply to `Unchained` classes and their providers as well.
+e.g.: Providers provided in their own lazy-loaded modules' providers array ARE NOT resolvable in other modules contexts.
+
+```ts
+@DI()
+@NgModule({
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
 ```
 
 [⬆ Back to top](#table-of-contents)
