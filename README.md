@@ -513,7 +513,7 @@ Factory functions that return class definitions that can be used to dynamically 
 
 A Mixin function that provides functionality related to handling subscriptions.
 A class extending this mixin will have access to the `onDestroy` property that should be used in the various takeUntil operators throughout the streams defined by the concrete class.
-The mixin's subscription handling logic depends on it's `ngOnDestroy` method being called by Angular. If you have to define `onDestroy$` lifecycle hook in your concrete class make sure to call `super.ngOnDestroy` as well or better yet use the [AuthHooks decorator](#autohooks) !
+The mixin's subscription handling logic depends on it's `ngOnDestroy` method being called by Angular. If you have to define `onDestroy$` lifecycle hook in your concrete class make sure to call `super.ngOnDestroy` as well or better yet use the [AuthHooks decorator](#auto-hooks) !
 
 ```ts
 class MyComp extends SubscriptionHandlerMixin() {
