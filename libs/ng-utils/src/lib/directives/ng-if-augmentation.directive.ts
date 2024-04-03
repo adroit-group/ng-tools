@@ -66,7 +66,7 @@ export class NgIfAugmentedDirective<T> implements OnChanges {
   * This is because the original ngIf shows the ngIfThen template when the value is empty array.
   */
   @Input()
-  public ngIfEmpty: boolean = false;
+  public ngIfEmpty = false;
 
   /**
    * @param directive The original ngIf directive instance on this host element
