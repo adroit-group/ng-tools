@@ -32,6 +32,7 @@ import { PlatformObserverService } from '../services';
  */
 @Directive({
   selector: '[ngRenderIn]',
+  standalone: true
 })
 export class NgRenderInDirective implements OnInit, OnDestroy {
   @Input('ngRenderIn') public platform!: keyof typeof EApplicationPlatform;
@@ -77,6 +78,7 @@ export class NgRenderInDirective implements OnInit, OnDestroy {
  */
 @Directive({
   selector: '[ngRenderInBrowser]',
+  standalone: true
 })
 export class NgRenderInBrowserDirective extends NgRenderInDirective {
   public override readonly platform = EApplicationPlatform.browser;
@@ -99,6 +101,7 @@ export class NgRenderInBrowserDirective extends NgRenderInDirective {
  */
 @Directive({
   selector: '[ngRenderInServer]',
+  standalone: true
 })
 export class NgRenderInServerDirective extends NgRenderInDirective {
   public override readonly platform = EApplicationPlatform.server;

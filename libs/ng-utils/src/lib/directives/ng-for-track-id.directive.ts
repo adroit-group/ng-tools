@@ -46,6 +46,7 @@ import { TRACK_BY_ID } from '../tokens';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[ngFor][ngForOf]',
+  standalone: true
 })
 export class NgForTrackIdDirective {
   @Input() public ngForTrackId: string = this.trackId;

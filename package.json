@@ -79,7 +79,7 @@
     "@angular/cli": "~15.2.0",
     "@angular/compiler-cli": "15.2.0",
     "@angular/language-service": "15.2.0",
-    "@ngneat/spectator": "^10.0.0",
+    "@ngneat/spectator": "^14.0.0",
     "@nrwl/cli": "15.8.0-beta.7",
     "@nrwl/cypress": "15.8.0-beta.7",
     "@nrwl/eslint-plugin-nx": "15.8.0-beta.7",

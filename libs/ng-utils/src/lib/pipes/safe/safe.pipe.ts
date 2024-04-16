@@ -49,6 +49,7 @@ type SafeValueResultMap = {
  */
 @Pipe({
   name: 'safe',
+  standalone: true,
 })
 export class SafePipe implements PipeTransform {
   /**

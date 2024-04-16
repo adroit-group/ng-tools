@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { EApplicationPlatform } from '../constants';
+import { AdroitNgUtilsCoreModule } from '../ng-utils-core.module';
 import { AdroitNgUtilsModule } from '../ng-utils.module';
 
 /**
@@ -101,7 +102,7 @@ export function RunOnPlatform(
     descriptor[appliedOn] = ((...args: any[]): void => {
       if (
         allowedPlatforms.includes(
-          AdroitNgUtilsModule.platformObserver
+          AdroitNgUtilsCoreModule.platformObserver
             .platformID as keyof typeof EApplicationPlatform
         )
       ) {
@@ -112,7 +113,7 @@ export function RunOnPlatform(
 
       console.log(
         `Method or accessor: ${propKey.toString()} did not get invoked on platform: ${
-          AdroitNgUtilsModule.platformObserver.platformID
+          AdroitNgUtilsCoreModule.platformObserver.platformID
         }`
       );
     }) as any;

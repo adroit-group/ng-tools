@@ -24,6 +24,7 @@ import {
  */
 @Directive({
   selector: '[ngFor][ngForOf][ngForEmpty],[ngFor][ngForOf][ngForElse]',
+  standalone: true
 })
 export class NgForAugmentationDirective<T> implements OnChanges {
   @Input()
