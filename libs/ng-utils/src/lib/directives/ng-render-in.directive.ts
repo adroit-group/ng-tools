@@ -83,6 +83,9 @@ export class NgRenderInDirective implements OnInit, OnDestroy {
 export class NgRenderInBrowserDirective extends NgRenderInDirective {
   public override readonly platform = EApplicationPlatform.browser;
 
+  @Input('ngRenderInBrowser')
+  public unused?: null | string = '';
+
   @Input('ngRenderInBrowserOr')
   public override alternativeTemplate?: TemplateRef<unknown>;
 }
@@ -105,6 +108,9 @@ export class NgRenderInBrowserDirective extends NgRenderInDirective {
 })
 export class NgRenderInServerDirective extends NgRenderInDirective {
   public override readonly platform = EApplicationPlatform.server;
+
+  @Input('ngRenderInServer')
+  public unused?: null | string = '';
 
   @Input('ngRenderInServerOr')
   public override alternativeTemplate?: TemplateRef<unknown>;

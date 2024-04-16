@@ -15,4 +15,10 @@ import { AdroitNgUtilsCoreModule } from './ng-utils-core.module';
   ],
   exports: [...LIB_DIRECTIVES, ...LIB_PIPES],
 })
-export class AdroitNgUtilsModule {}
+export class AdroitNgUtilsModule {
+  static forRoot() {
+    return {
+      ngModule: AdroitNgUtilsModule,
+    };
+  }
+}
