@@ -16,7 +16,8 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
 | --------------- | --------------- |
 | 0.3.x           | 13.x            |
 | 14.x            | 14.x            |
-| 15.x            | 15.x            |
+| 15.1.x          | 15.x            |
+| >= 15.2.x       | >= 15.x         |
 
 ## Table of contents
 
@@ -64,7 +65,7 @@ Run `npm install @adroit-group/ng-utils --save` to install the library.
 
 ## Usage
 
-Include `AdroitNgUtilsModule` in your module
+Include `AdroitNgUtilsModule` in your module to import all the directives and pipes of the library
 
 ```typescript
 import { AdroitNgUtilsModule } from 'ng-utils';
@@ -72,6 +73,18 @@ import { AdroitNgUtilsModule } from 'ng-utils';
 @NgModule({
   imports: [
     AdroitNgUtilsModule.forRoot(),
+  ]
+})
+```
+
+Or include `AdroitNgUtilsCoreModule` in your root module to provide the necessary providers only and then import the standalone directives and pipes only where you need them
+
+```typescript
+import { AdroitNgUtilsCoreModule } from 'ng-utils';
+
+@NgModule({
+  imports: [
+    AdroitNgUtilsCoreModule
   ]
 })
 ```
