@@ -7,5 +7,14 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Adroit-Group/ng-tools"
-  }
+  },
+  "peerDependencies": {
+    "@angular/common": ">=15.0.0",
+    "@angular/core": ">=15.0.0",
+    "@angular/cdk": ">=15.0.0",
+    "@angular/platform-browser": ">=15.0.0",
+    "@angular/forms": ">=15.0.0",
+    "rxjs": ">=6.5.3"
+  },
+  "sideEffects": false
 }
