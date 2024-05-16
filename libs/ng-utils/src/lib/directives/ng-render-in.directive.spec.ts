@@ -77,7 +77,7 @@ describe('Directive: NgRenderInBrowserDirective', () => {
 
   beforeEach(() => {
     spectator = createDirective(
-      `<div *ngRenderInBrowser="or serverTpl" #container>
+      `<div *ngRenderInBrowser="''; or serverTpl" #container>
           <div #content></div>
         </div>
 

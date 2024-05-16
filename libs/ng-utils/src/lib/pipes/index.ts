@@ -1,10 +1,10 @@
-import { MethodInvokerPipe } from './method-invoker.pipe';
-import { SafePipe } from './safe.pipe';
+import { MethodInvokerModule } from './method-invoker';
+import { SafeModule } from './safe';
 
-export { MethodInvokerPipe } from './method-invoker.pipe';
-export { SafePipe } from './safe.pipe';
+export { SafeModule, SafePipe } from './safe';
+export { MethodInvokerModule, MethodInvokerPipe } from './method-invoker';
 
 /**
  * @internal
  */
-export const LIB_PIPES = [MethodInvokerPipe, SafePipe];
+export const LIB_PIPES = [MethodInvokerModule, SafeModule];

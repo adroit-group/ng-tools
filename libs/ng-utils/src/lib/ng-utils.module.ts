@@ -1,27 +1,24 @@
-import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { LIB_DIRECTIVES } from './directives';
 import { MixinDependencyResolverModule } from './mixin-dependency-resolver.module';
 import { LIB_PIPES } from './pipes';
-import { PlatformObserverService } from './services/platform-observer.service';
+import { AdroitNgUtilsCoreModule } from './ng-utils-core.module';
 
 @NgModule({
-  imports: [CommonModule, MixinDependencyResolverModule, LayoutModule],
-  declarations: [...LIB_DIRECTIVES, ...LIB_PIPES],
-  exports: [...LIB_DIRECTIVES, ...LIB_PIPES, LayoutModule],
+  imports: [
+    CommonModule,
+    AdroitNgUtilsCoreModule,
+    MixinDependencyResolverModule,
+    ...LIB_DIRECTIVES,
+    ...LIB_PIPES,
+  ],
+  exports: [...LIB_DIRECTIVES, ...LIB_PIPES],
 })
 export class AdroitNgUtilsModule {
-  public static platformObserver: PlatformObserverService;
-
-  public static forRoot(): ModuleWithProviders<AdroitNgUtilsModule> {
+  static forRoot() {
     return {
       ngModule: AdroitNgUtilsModule,
-      providers: [...LIB_PIPES],
     };
-  }
-
-  constructor(platformObserver: PlatformObserverService) {
-    AdroitNgUtilsModule.platformObserver = platformObserver;
   }
 }

@@ -16,7 +16,8 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
 | --------------- | --------------- |
 | 0.3.x           | 13.x            |
 | 14.x            | 14.x            |
-| 15.x            | 15.x            |
+| 15.1.x          | 15.x            |
+| >= 15.2.x       | >= 15.x         |
 
 ## Table of contents
 
@@ -26,6 +27,7 @@ All notable changes to this project are documented in [CHANGELOG.md](https://git
   - [Installation](#installation)
   - [Usage](#usage)
   - [Configuration](#configuration)
+  - [Package structure](#package-structure)
   - [Decorators](#decorators)
     - [Auto hooks](#auto-hooks)
       - [Quick rundown of usage:](#quick-rundown-of-usage)
@@ -63,7 +65,7 @@ Run `npm install @adroit-group/ng-utils --save` to install the library.
 
 ## Usage
 
-Include `AdroitNgUtilsModule` in your module
+Include `AdroitNgUtilsModule` in your module to import all the directives and pipes of the library
 
 ```typescript
 import { AdroitNgUtilsModule } from 'ng-utils';
@@ -71,6 +73,18 @@ import { AdroitNgUtilsModule } from 'ng-utils';
 @NgModule({
   imports: [
     AdroitNgUtilsModule.forRoot(),
+  ]
+})
+```
+
+Or include `AdroitNgUtilsCoreModule` in your root module to provide the necessary providers only and then import the standalone directives and pipes only where you need them
+
+```typescript
+import { AdroitNgUtilsCoreModule } from 'ng-utils';
+
+@NgModule({
+  imports: [
+    AdroitNgUtilsCoreModule
   ]
 })
 ```
@@ -88,6 +102,18 @@ import { AdroitNgUtilsModule } from 'ng-utils';
   ]
 })
 ```
+
+[⬆ Back to top](#table-of-contents)
+
+## Package structure
+
+Ng utils is a monorepo that contains multiple packages. The main package that contains most of the useful stuff we've developed is `@adroit-group/ng-utils`. When you use the library, you should only import from this package. No need to specify any sub-package paths.
+
+However there are some sub-packages that are useful on their own. These are:
+
+- `@adroit-group/ng-utils/di-unchained` - A DI library that allows you to use DI without the need to use the `@Injectable` decorator. This is useful when you want to use DI in a class that is not injectable (e.g. a mixin).
+
+When you want to use these make sure to import from the proper sub-package.
 
 [⬆ Back to top](#table-of-contents)
 

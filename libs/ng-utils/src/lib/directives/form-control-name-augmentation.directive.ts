@@ -5,5 +5,6 @@ import { FormControlName } from '@angular/forms';
 @Directive({
   selector: '[formControlName]',
   exportAs: 'formControlName',
+  standalone: true
 })
 export class FormControlNameAugmentationDirective extends FormControlName {}

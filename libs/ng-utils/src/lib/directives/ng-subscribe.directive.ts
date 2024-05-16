@@ -140,6 +140,7 @@ type NgSubscribeAsyncInput<T> = AsyncInput<T> | AsyncValuesMap<T>;
 */
 @Directive({
   selector: '[ngSubscribe]',
+  standalone: true
 })
 export class NgSubscribeDirective<T> implements OnInit, OnDestroy {
   /**

@@ -38,8 +38,12 @@ describe('Directive: FormControlNameAugmentation', () => {
 
   const createComponent = createComponentFactory({
     component: TestComponent,
-    declarations: [FormControlNameAugmentationDirective],
-    imports: [CommonModule, ReactiveFormsModule],
+    declarations: [],
+    imports: [
+      CommonModule,
+      ReactiveFormsModule,
+      FormControlNameAugmentationDirective,
+    ],
   });
 
   beforeEach(() => {

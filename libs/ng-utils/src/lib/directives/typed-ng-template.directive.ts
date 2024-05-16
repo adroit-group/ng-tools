@@ -3,6 +3,7 @@ import { Directive, Input, TemplateRef } from '@angular/core';
 @Directive({
     // eslint-disable-next-line @angular-eslint/directive-selector
     selector: '[typedNgTemplate]',
+    standalone: true
 })
 export class TypedNgTemplateDirective<TypeToken> {
     // how you tell the directive what the type should be

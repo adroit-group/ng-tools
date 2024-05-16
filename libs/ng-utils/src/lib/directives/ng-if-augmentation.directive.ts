@@ -19,6 +19,7 @@ import { Directive, Host, Input, OnChanges, TemplateRef } from '@angular/core';
  */
 @Directive({
   selector: '[ngIf][ngIfOr],[ngIf][ngIfBut]',
+  standalone: true
 })
 export class NgIfAugmentedDirective<T> implements OnChanges {
   /**

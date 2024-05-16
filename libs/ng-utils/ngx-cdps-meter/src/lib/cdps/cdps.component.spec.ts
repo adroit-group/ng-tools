@@ -1,26 +1,20 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CdpsComponent } from './cdps.component';
+import { createComponentFactory } from '@ngneat/spectator';
 
 describe('CdpsComponent', () => {
+  let spectator;
   let component: CdpsComponent;
-  let fixture: ComponentFixture<CdpsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ CdpsComponent ]
-    })
-    .compileComponents();
-  }));
+  const createComponent = createComponentFactory({
+    component: CdpsComponent,
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CdpsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
+    component = spectator.component;
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).toBeDefined();
   });
 });

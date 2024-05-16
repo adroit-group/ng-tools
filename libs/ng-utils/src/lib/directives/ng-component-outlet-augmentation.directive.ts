@@ -75,6 +75,7 @@ export interface NgComponentOutletEvent {
 @Directive({
   selector: '[ngComponentOutlet]',
   exportAs: 'ngComponentOutlet',
+  standalone: true
 })
 export class NgComponentOutletAugmentationDirective {
   @Input('ngComponentOutlet') public component: Type<unknown> | null = null;

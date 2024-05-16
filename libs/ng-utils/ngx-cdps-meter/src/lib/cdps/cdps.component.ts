@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { CommonModule } from '@angular/common';
 import { OnInit } from '@angular/core';
 import {
   Component,
@@ -12,6 +13,8 @@ import {
   selector: 'ad-cdps',
   templateUrl: './cdps.component.html',
   styleUrls: ['./cdps.component.css'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class CdpsComponent implements DoCheck, OnInit {
   @Input()
